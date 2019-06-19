@@ -1,0 +1,12 @@
+.catkin_workspace
+.robot_ns
+*.0
+__pycache__
+*.pyc
+.vscode
+CATKIN_IGNORE
+
+self_localization/config/localization.yaml
+vision/config/FIRA.yaml
+vision/config/HSVcolormap.bin
+vision/config/prosilica_driver.yaml

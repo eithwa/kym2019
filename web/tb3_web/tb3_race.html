@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" name="author" content="Minda">
+    <title>tb3_race</title>
+    <link rel="shortcut icon" href="img/turtle.png" />
+    <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- jQuery UI-->
+    <link rel="stylesheet" href="jquery-ui-1.11.4/jquery-ui.css">
+    <!-- Javascript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="jquery-ui-1.11.4/jquery-ui.js"></script>
+    <script src="jquery-ui-1.11.4/jquery-ui.min.js"></script>
+    <script src="js/eventemitter2.min.js"></script>
+    <script src="js/ros/roslib.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
+
+
+    <!-- =========================== Custom ============================ -->
+    <!-- css lib -->
+    <link rel="stylesheet" href="css/form.css">
+
+    <!-- js lib -->
+    <script src="js/variable.js"></script>
+</head>
+
+<body class="Overflow" onload="Init()">
+    <div class="modal-dialog Interface-Background Interface-Size Overflow">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table class="Table-W100">
+                    <tr>
+                        <td>
+                            <h2 class="modal-title" id="Interface-Title">Turtlebot_Race</h2>
+                        </td>
+                        <td>
+                            <div id="info"> </div>
+                        </td>
+                        <td>
+                            <div id="WifiButton">
+                                <i class="fa fa-3x fa-wifi" id="WifiButton-style" aria-hidden="true" data-toggle="modal"
+                                    data-target="#connect_Robot"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-body Interface-BodySize">
+                <div id="CameraSwitch">
+                    <table class="Table-W100 Table-H90 Table-Center">
+                        <tr>
+                            <td>
+                                <div>
+                                    <input type="button" class="Button-style" id="Camera-Src" name="CameraElement"
+                                        value="src" onclick="Open_Camera(this.value);" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <input type="button" class="Button-style" id="Camera-Mask" name="CameraElement"
+                                        value="mask" onclick="Open_Camera(this.value)" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <input type="button" class="Button-style" id="Camera-Monitor" name="CameraElement"
+                                        value="monitor" onclick="Open_Camera(this.value)" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="Camera-View" name="CameraElement" onclick="Open_Camera(this.value)" />
+                                    <label for="Camera-View">View</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group" align="center" id="View-Window">
+                    <img id="player" src="img/offline.png">
+                </div>
+                <div class="form-group" align="center" id="Param-Window">
+                    <table class="Table-W100 Table-Center">
+                        <tr>
+                            <td>
+                                <div class="form-group" align="center" id="Set-Param">
+                                    <!-- Set Param Ul -->
+                                    <ul id="Set-Param-ul" class="nav nav-tabs">
+                                        <li class="active dropdown">
+                                            <a href="#" id="RobotTabDrop" class="dropdown-toggle" data-toggle="dropdown" >Robot
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="RobotTabDrop" >
+                                                <li><a class="active" href="#Robot-Param" tabindex="-1" data-toggle="tab">Param</a></li>
+                                                <li><a href="#Robot-Strategy" tabindex="-1" data-toggle="tab">Strategy</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="active dropdown">
+                                            <a href="#" id="VisionTabDrop" class="dropdown-toggle" data-toggle="dropdown">Vision
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="RobotTabDrop">
+                                                <li><a href="#Vision-HSV" tabindex="-1" data-toggle="tab">HSV</a></li>
+                                                <li><a href="#Vision-Param" tabindex="-1" data-toggle="tab">Center</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <!-- Set Param Content  -->
+                                    <div id="Set-Param-Content" class="tab-content">
+                                        <div class="tab-pane fade" id="Robot-Param">
+                                            <p>fuck</p>
+                                        </div>
+                                        <div class="tab-pane fade in active" id="Robot-Strategy">
+                                        
+                                            <table>
+                                                <td>
+                                                    <label>電池電量&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                </td>
+                                                <td>
+                                                    <label id="batteryid">0.00%</label>
+                                                    <label id="batteryid2">%</label>
+                                                </td>
+                                            </table>
+                                            <table width="80%" id="DoublePointDiv">
+                                                <tr >
+                                                    <td>
+                                                        <label>Double Point</label>
+                                                    </td>
+                                                    <td width="34%" align="center" >
+                                                        <div> 
+                                                          <input autocomplete="off" id="double_red" type="radio" name="double_point" onclick="PublishTopicdouble(0)" />
+                                                          <label id="double_red" for="double_red">Red</label>
+                                                        </div>
+                                                    </td>
+                                                    <td width="34%" align="center">
+                                                        <input autocomplete="off" id="double_blue" type="radio" name="double_point" onclick="PublishTopicdouble(1)" />
+                                                        <label id="double_blue" for="double_blue">Blue</label>
+                                                    </td>
+                                                    <td  width="34%" align="center">
+                                                        <input autocomplete="off" id="double_yellow" type="radio" name="double_point" onclick="PublishTopicdouble(2)" />
+                                                        <label id="double_yellow" for="double_yellow">Yellow</label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table width="85%" id="ArmDiv">
+                                                <tr >
+                                                    <td width="34%" align="center" >
+                                                        <label>ArmControl </label>
+                                                    </td>
+                                                    <td width="34%" align="center">
+                                                        <input type="button" id="open_btn" name="StrategyElement" value="open" onclick="arm(0);" />
+                                                    </td>
+                                                    <td  width="34%" align="center">
+                                                        <input type="button" id="close_btn" name="StrategyElement" value="close" onclick="arm(1);" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label>&nbsp;&nbsp;&nbsp;odom&nbsp;&nbsp;</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>(</label>
+                                                        <label id="local_x" name="StrategyElement">999</label>
+                                                        <label>,</label>
+                                                        <label id="local_y" name="StrategyElement">999</label>
+                                                        <label>)</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>&nbsp;&nbsp;angle&nbsp;&nbsp;</label>
+                                                    </td>
+                                                    <td>
+                                                        <label id="local_angle" name="StrategyElement">999</label>
+                                                    </td>
+                                                <tr>
+                                            </table>
+                          
+                                            <table class="Table-W100 Table-Center Table-H90">
+                                                <tr>
+                                                    <td>
+                                                        <input type="button" id="start_btn" name="StrategyElement"
+                                                            value="start" onclick="strategy_start(1);" />
+                                                        <input type="button" id="stop_btn" name="StrategyElement" value="stop"
+                                                            onclick="strategy_start(0);" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="button" id="reset_btn" name="StrategyElement"
+                                                            value="reset" onclick="Pub_Reset();" />
+                                                    <td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label>&nbsp;</label>
+                                                    </td>
+                                                <tr>
+                                            </table>
+                                            <table >
+                                                <tr >
+                                                  <div id="KeyboardDiv" >
+                                                    <input autocomplete="off" id="KeyboardControlButton" type="checkbox" name="KeyboardControl" onclick="KeyboardState(this.checked)" />
+                                                    <label id="KeyboardControlButton" for="KeyboardControlButton">Keyboard Control</label>
+                                                  </div>
+                                                  <div id="directiondiv">
+                                                      <label id="direction">停止</label>
+                                                  </div>
+                                                <tr>
+                                                <tr>
+                                                    <td colspan="2" align="center">
+                                                        <label id="SpeedLabel">Speed&nbsp;<i class="fa fa-bolt "></i></label>
+                                                    </td>
+                                                    <td>
+                                                        <input id="SpeedSlider" name="SpeedElement" type="range" min="0" max="100" value="0" oninput="ToInputValue(this.value,this.name,1);">
+                                                    </td>
+                                                    <td align="center">
+                                                        <input id="SpeedInput" name="SpeedElement" placeholder="Speed" value="0" type="number" min="0" max="100" oninput="ToSliderValue(this.value,this.name,0);" />
+                                                    </td>
+                                                </tr>
+                                      
+                                                <tr>
+                                                    <td colspan="3" align="center" left="78%">
+                                                        
+                                                    </td>
+                                                </tr>
+                                          </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="Vision-HSV">
+                                            <table class="Table-W100 Table-Center Table-H90">
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Hmin</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Hue_Bar_min" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="180" oninput="showLabel(this.value, 'HSVLabelElement',0);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Hmax</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Hue_Bar_max" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="180" oninput="showLabel(this.value, 'HSVLabelElement',1);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Smin</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Sat_Bar_min" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="255" oninput="showLabel(this.value, 'HSVLabelElement',2);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Smax</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Sat_Bar_max" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="255" oninput="showLabel(this.value, 'HSVLabelElement',3);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Vmin</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Val_Bar_min" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="255" oninput="showLabel(this.value, 'HSVLabelElement',4);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Vmax</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Val_Bar_max" class="HSV-silder" name="HSVElement"
+                                                            type="range" min="0" max="255" oninput="showLabel(this.value, 'HSVLabelElement',5);Set_HSV()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="HSVLabelElement">255</label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="Table-W100 Table-Center Table-H10">
+                                                <tr>
+                                                    <td>
+                                                        <select autocomplete="off" id="HSVSelect" onchange="Change_HSVmode()">
+                                                            <option value="0">Red</option>
+                                                            <option value="1">Blue</option>
+                                                            <option value="2">Yellow</option>
+                                                            <option value="3">White</option>
+                                                            <option value="4">Black</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <button id="HSV-Sent" onclick="Save_HSV()">sent</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="Vision-Param">
+                                            <table class="Table-W100 Table-H90 Table-Center">
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Center X</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Center" name="VisionParamElement" type="range"
+                                                            min="0" max="400" oninput="showLabel(this.value, 'VisionParamLabelElement',0);Set_center()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="VisionParamLabelElement">200</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Center Y</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Y" name="VisionParamElement" type="range" min="100"
+                                                            max="500" oninput="showLabel(this.value, 'VisionParamLabelElement',1);Set_center()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="VisionParamLabelElement">300</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Catch Distance</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Height" name="VisionParamElement" type="range"
+                                                            min="0" max="100" oninput="showLabel(this.value, 'VisionParamLabelElement',2);Set_center()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="VisionParamLabelElement">300</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="Td-W10">
+                                                        <label>Size Filter</label>
+                                                    </td>
+                                                    <td class="Td-W70">
+                                                        <input id="slider_Dis" name="VisionParamElement" type="range"
+                                                            min="0" max="100" oninput="showLabel(this.value, 'VisionParamLabelElement',3);Set_center()"></input>
+                                                    </td>
+                                                    <td class="Td-W20">
+                                                        <label name="VisionParamLabelElement">0</label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="Table-W100 Table-Center Table-H10">
+                                                <tr>
+                                                    <td>
+                                                        <button onclick="Save_VisionParam() ">sent</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group" align="center" id="Display">
+                                    
+                                    <table>
+                                        <label>Color Disable</label>
+                                    </table>
+                                    <table width="100%" id="ColorDisableDiv">
+                                        <tr>
+                                            <td width="34%" align="center">
+                                                <input autocomplete="off" id="Red_disable" type="checkbox" name="colorElement" onclick="Color_Disable(0)" />
+                                                <label id="Red_disable" for="Red_disable">Red</label>
+                                            </td>
+                                            <td width="34%" align="center">
+                                                <input autocomplete="off" id="Blue_disable" type="checkbox" name="colorElement" onclick="Color_Disable(1)" />
+                                                <label id="Blue_disable" for="Blue_disable">Blue</label>
+                                            </td>
+                                            <td  width="34%" align="center">
+                                                <input autocomplete="off" id="Yellow_disable" type="checkbox" name="colorElement" onclick="Color_Disable(2)" />
+                                                <label id="Yellow_disable" for="Yellow_disable">Yellow</label>
+                                            </td>
+                                            <!--
+                                            <td style="border:1px black solid;border-radius:5px;">
+                                                <label>White</label>
+                                                <input type="checkbox" id="White_disable" name="colorElement"
+                                                    onclick="Color_Disable(3)" />
+                                            </td>
+                                            <td style="border:1px black solid;border-radius:5px;">
+                                                <label>Black</label>
+                                                <input type="checkbox" id="Black_disable" name="colorElement"
+                                                    onclick="Color_Disable(4)" />
+                                            </td>
+                                            -->
+                                        </tr>
+                                    </table>
+                                    
+                                    
+                                    <table>
+                                        <label>Monitor Information</label>
+                                    </table>
+                                    <table  width="95%"align="center">
+                                        <tr>
+                                            <td colspan="2">
+                                                <label>FPS :</label>
+                                                <label id="fps" name="FpsElement">0</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <label>Catch Ball :</label>
+                                                <label id="catch" name="CatchElement">False</label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="95%" height="50%"align="center">
+                                        <tr>
+                                            <td>
+                                                <label>Color</label>
+                                            </td>
+                                            <td>
+                                                <label>Offset</label>
+                                            </td>
+                                            <td>
+                                                <label>Distance</label>
+                                            </td>
+                                            <td>
+                                                <label>Point&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Red</label>
+                                            </td>
+                                            <td>
+                                                <label id="red_offset" name="MonitorElement">0</label>
+                                            </td>
+                                            <td>
+                                                <label id="red_distance" name="MonitorElement">999</label>
+                                            </td>
+                                            <td>
+                                                <label>(</label>
+                                                <label id="red_point_x" name="MonitorElement">0</label>
+                                                <label>,</label>
+                                                <label id="red_point_y" name="MonitorElement">0</label>
+                                                <label>)</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Blue</label>
+                                            </td>
+                                            <td>
+                                                <label id="blue_offset" name="MonitorElement">0</label>
+                                            </td>
+                                            <td>
+                                                <label id="blue_distance" name="MonitorElement">999</label>
+                                            </td>
+                                            <td>
+                                                <label>(</label>
+                                                <label id="blue_point_x" name="MonitorElement">0</label>
+                                                <label>,</label>
+                                                <label id="blue_point_y" name="MonitorElement">0</label>
+                                                <label>)</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Yellow</label>
+                                            </td>
+                                            <td>
+                                                <label id="yellow_offset" name="MonitorElement">0</label>
+                                            </td>
+                                            <td>
+                                                <label id="yellow_distance" name="MonitorElement">999</label>
+                                            </td>
+                                            <td>
+                                                <label>(</label>
+                                                <label id="yellow_point_x" name="MonitorElement">0</label>
+                                                <label>,</label>
+                                                <label id="yellow_point_y" name="MonitorElement">0</label>
+                                                <label>)</label>
+                                            </td>
+                                        </tr>
+                                        <!--
+                                        <tr>
+                                            <td>
+                                                <label>White</label>
+                                            </td>
+                                            <td>
+                                                <label id="white_offset" name="MonitorElement">0</label>
+                                            </td>
+                                            <td>
+                                                <label id="white_distance" name="MonitorElement">999</label>
+                                            </td>
+                                            <td>
+                                                <label>(</label>
+                                                <label id="white_point_x" name="MonitorElement">0</label>
+                                                <label>,</label>
+                                                <label id="white_point_y" name="MonitorElement">0</label>
+                                                <label>)</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Black</label>
+                                            </td>
+                                            <td>
+                                                <label id="black_offset" name="MonitorElement">0</label>
+                                            </td>
+                                            <td>
+                                                <label id="black_distance" name="MonitorElement">999</label>
+                                            </td>
+                                            <td>
+                                                <label>(</label>
+                                                <label id="black_point_x" name="MonitorElement">0</label>
+                                                <label>,</label>
+                                                <label id="black_point_y" name="MonitorElement">0</label>
+                                                <label>)</label>
+                                            </td>
+                                        </tr>
+                                        -->
+                                    </table>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wifi Setting-->
+    <div class="modal fade Interface-Background" id="connect_Robot" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="WifiContent-style">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Connect To Robot</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="RobotIPDATA" class="control-label">Robot_IP:</label>
+                            <input name="RobotIPDATA" type="text" class="form-control" id="RobotIP" value=IP.textContent>
+                        </div>
+                        <div class="form-group">
+                            <label for="RobotHostDATA" class="control-label">Robot_Host:</label>
+                            <input name="RobotHostDATA" type="text" class="form-control" id="RobotHost" value=Host.textContent>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="ros.close();">Close</button>
+                    <button type="button" class="btn btn-primary" id="send-message" onclick="RobotConnect();history.go(0);">Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+    <script type="text/javascript">
+      $("#KeyboardDiv").buttonset();
+      $("#ColorDisableDiv").buttonset();
+      $("#DoublePointDiv").buttonset();
+    </script>
+<footer>
+    <script src="js/slider/SliderControl.js"></script>
+    <script src="js/init.js"></script>
+
+    <!-- ros lib -->
+    <script src="js/ros/RobotConnect.js"></script>
+    <script src="js/ros/Rostopic.js"></script>
+    <script src="js/ros/Rosservice.js"></script>
+    <script src="js/ros/RosParameter.js"></script>
+    <script src="js/ros/video.js"></script>
+    <script src="js/SliderControl.js"></script>
+    <script src="js/KeyboardControl.js"></script>
+</footer>
+</html>
