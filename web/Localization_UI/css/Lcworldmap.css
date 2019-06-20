@@ -679,7 +679,7 @@ body {
     color: #1A1A65;
 }
 /*==========================================================*/
-#StandbyButton {
+#StandbyLable {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
@@ -687,20 +687,20 @@ body {
     
 }
 
-#StandbyButton.ui-state-hover {
+#StandbyLable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     background-color: #FFF;
 }
 
-#StandbyButton.ui-state-active {
+#StandbyLable.ui-state-active {
     background-color: #FFCC00;
     font-size: 17px;
     color: #1A1A65;
 }
 /*==========================================================*/
-#GroundButton {
+#GroundLable {
     text-align: center;
     background-image: none;
     /*background-color: #99CCFF;*/
@@ -709,14 +709,14 @@ body {
     
 }
 
-#GroundButton.ui-state-hover {
+#GroundLable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     background-color: #FFF;
 }
 
-#GroundButton.ui-state-active {
+#GroundLable.ui-state-active {
     background-color: #FFCC00;
     font-size: 17px;
     color: #1A1A65;

@@ -206,49 +206,46 @@ body {
 }
 
 /*==========================================================*/
-#KeyboardControlButton {
+#KeyboardControlLable {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
-    color: #424242;
-    background-color: #ededed;
+    color: #663D00;
     
 }
-#KeyboardControlButton.ui-state-hover {
+#KeyboardControlLable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
-    background-color: #ffffff
+    background-color: #FFF;
 }
 
-#KeyboardControlButton.ui-state-active {
-    background-color: #ffffdb;
+#KeyboardControlLable.ui-state-active {
+    background-color: #FFCC00;
     font-size: 17px;
-    color: #424242;
+    color: #1A1A65;
 }
 /*==========================================================*/
-#StandbyButton {
+#StandbyLable {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
-    color: #424242;
-    background-color: #ededed;
+    color: #663D00;
     
 }
 
-#StandbyButton.ui-state-hover {
+#StandbyLable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
-    background-color: #ffffff;
+    background-color: #FFF;
 }
 
-#StandbyButton.ui-state-active {
-    background-color: #ffffdb;
+#StandbyLable.ui-state-active {
+    background-color: #FFCC00;
     font-size: 17px;
-    color: #424242;
+    color: #1A1A65;
 }
-
 /*===========================================*/
 #info { 
     position: absolute;
