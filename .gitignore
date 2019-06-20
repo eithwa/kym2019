@@ -6,6 +6,7 @@ __pycache__
 .vscode
 CATKIN_IGNORE
 
+fira_launch/default_config/vision_better.yaml
 self_localization/config/localization.yaml
 vision/config/FIRA.yaml
 vision/config/HSVcolormap.bin
