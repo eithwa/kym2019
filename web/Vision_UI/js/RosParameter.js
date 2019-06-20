@@ -117,6 +117,7 @@ ParameterCenter_Horizon.get(function(value) {
     if (value != null) {
         var obj = document.getElementsByName("HorizonElement");
         obj[0].value = value;
+        document.getElementsByName("HorizonLabel")[0].value = value;
     }
 });
 function ParameterCenterTransfer() {
@@ -628,3 +629,4 @@ function ParameterBlackTransfer2() {
     //SendMsgs(str);
     
 }
+

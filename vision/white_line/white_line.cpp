@@ -105,16 +105,10 @@ cv::Mat Vision::White_Line(const cv::Mat iframe)
     }
     //=====================draw the scan line===========
     oframe = threshold.clone();
-    int line_count = 0;
-    int ground = OuterMsg-100;
     for (double angle = FrontMsg; angle < 360 + FrontMsg; angle = angle + WhiteAngleMsg)
     {
         for (int r = InnerMsg; r <= OuterMsg; r++)
         {
-             if(line_count%2==0&&r<(InnerMsg+ground)/2){
-                r=(InnerMsg+ground)/2;
-                if (r>OuterMsg)break;
-            }
             int angle_be = Angle_Adjustment(angle);
 
             int x_ = r * Angle_cos[angle_be];
@@ -143,15 +137,14 @@ cv::Mat Vision::White_Line(const cv::Mat iframe)
                 break;
             }
         }
-        line_count++;
     }
     line(oframe, Point(CenterXMsg, CenterYMsg - InnerMsg), Point(CenterXMsg, CenterYMsg + InnerMsg), Scalar(0, 255, 0), 1);
     line(oframe, Point(CenterXMsg - InnerMsg, CenterYMsg), Point(CenterXMsg + InnerMsg, CenterYMsg), Scalar(0, 255, 0), 1);
     circle(oframe, Point(CenterXMsg, CenterYMsg), InnerMsg, Scalar(0, 255, 0), 0);
     circle(oframe, Point(CenterXMsg, CenterYMsg), OuterMsg, Scalar(0, 255, 0), 0);
 
-    cv::imshow("white_line", oframe);
-    cv::waitKey(10);
+    //cv::imshow("white_line", oframe);
+    //cv::waitKey(10);
 
     return oframe;
 }
