@@ -329,6 +329,12 @@ void Base_Control::shoot_regularization()
 
 void Base_Control::speed_regularization(double w1, double w2, double w3)
 {
+static int counter_en1 = 0;
+static int counter_en2 = 0;
+static int counter_en3 = 0;
+counter_en1 = counter_en1 +1;
+ counter_en2 =  counter_en2 + 1;
+counter_en3 =  counter_en3 + 1;
 	unsigned char w1_dir = (w1>0)? 0x80 : 0;
 	unsigned char w2_dir = (w2>0)? 0x80 : 0;
 	unsigned char w3_dir = (w3>0)? 0x80 : 0;
@@ -339,14 +345,58 @@ void Base_Control::speed_regularization(double w1, double w2, double w3)
 	if(w1_speed_percent >= 100)w1_speed_percent = 100;
 	if(w2_speed_percent >= 100)w2_speed_percent = 100;
 	if(w3_speed_percent >= 100)w3_speed_percent = 100;
+    if(w1_speed_percent >= 0)this->en1=1;
+    if(w2_speed_percent >= 0)this->en2=1;
+    if(w3_speed_percent >= 0)this->en3=1;
+    if(stop1 && w1_speed_percent!=0){
+    //if(stop1 && counter_en1>=5 && w1_speed_percent!=0){
+        this->stop1 = 0;
+        this->en1 = 0;
+        counter_en1 = 0;
+    }
+    //if(stop2 && counter_en2>=5 && w2_speed_percent!=0){
+    if(stop2 && w2_speed_percent!=0){
+        this->stop2 = 0;
+        this->en2 = 0;
+        counter_en2 = 0;
+    }
+    //if(stop3 && counter_en3>=5 && w3_speed_percent!=0){
+    if(stop3 && w3_speed_percent!=0){
+        this->stop3 = 0;
+        this->en3 = 0;
+        counter_en3 = 0;
+    }
+
 //	enable
-	this->en1 = (w1_speed_percent > 0)? 1 : 0;
-	this->en2 = (w2_speed_percent > 0)? 1 : 0;
-	this->en3 = (w3_speed_percent > 0)? 1 : 0;
-	this->stop1 = 0;
-	this->stop2 = 0;
-	this->stop3 = 0;
-//	stop
+	if(w1_speed_percent <= 0){
+        this->stop1 = 1;
+        w1_speed_percent = 1;
+    }
+    if(w2_speed_percent <= 0){
+        this->stop2 = 1;
+         w2_speed_percent = 1;
+    }
+    if(w3_speed_percent <= 0){
+        this->stop3 = 1;
+         w3_speed_percent = 1;
+    }
+//    static int counter = 0;
+//    if(stop1 & stop2 & stop3){
+//        counter++;
+//            if(counter>20){
+//        	    this->stop1 = 0;
+//        	    this->stop2 = 0;
+//        	    this->stop3 = 0;
+//        	    w1_speed_percent = 0;
+//        	    w2_speed_percent = 0;
+//        	    w3_speed_percent = 0;
+//        	    this->en1 = 0;
+//        	    this->en2 = 0;
+//        	    this->en3 = 0;
+//            }
+//    }
+
+//	
 /*
 	if((w1_speed_percent != 999)&&(stop1 == 1)){
 		en1 = 0;
@@ -438,15 +488,10 @@ void Base_Control::forwardKinematics()
 void Base_Control::inverseKinematics()
 {
 	double w1_speed, w2_speed, w3_speed;
-//For Avoid Challenge
-	x_CMD = *(this->base_robotCMD->x_speed);
-	y_CMD = *(this->base_robotCMD->y_speed);
-	yaw_CMD = *(this->base_robotCMD->yaw_speed);
-/*
 	double x_error = *(this->base_robotCMD->x_speed) - x_CMD;
 	double y_error = *(this->base_robotCMD->y_speed) - y_CMD;
 	double yaw_error = *(this->base_robotCMD->yaw_speed) - yaw_CMD;
-
+/*
 	if(x_error>=0)x_CMD = (x_error>4)? x_CMD+4 : *(this->base_robotCMD->x_speed);
 	else x_CMD = (x_error<(-4))? x_CMD-4 : *(this->base_robotCMD->x_speed);
 	if(y_error>=0)y_CMD = (y_error>4)? y_CMD+4 : *(this->base_robotCMD->y_speed);
@@ -454,10 +499,16 @@ void Base_Control::inverseKinematics()
 	if(yaw_error>=0)yaw_CMD = (yaw_error>4)? yaw_CMD+4 : *(this->base_robotCMD->yaw_speed);
 	else yaw_CMD = (yaw_error<(-4))? yaw_CMD-4 : *(this->base_robotCMD->yaw_speed);
 */
-	w1_speed = this->x_CMD*cos(m1_Angle)+y_CMD*sin(m1_Angle)+yaw_CMD*robot_radius*(-1);
-	w2_speed = this->x_CMD*cos(m2_Angle)+y_CMD*sin(m2_Angle)+yaw_CMD*robot_radius*(-1);
-	w3_speed = this->x_CMD*cos(m3_Angle)+y_CMD*sin(m3_Angle)+yaw_CMD*robot_radius*(-1);
-
+	w1_speed = this->x_CMD*cos(m1_Angle)+y_CMD*(-1)+yaw_CMD*robot_radius*(-1);
+	w2_speed = this->x_CMD*cos(m2_Angle)+y_CMD*(1)+yaw_CMD*robot_radius*(-1);
+	w3_speed = this->x_CMD*cos(m3_Angle)+y_CMD*(0)+yaw_CMD*robot_radius*(-1);
+	//w1_speed = this->x_CMD*cos(m1_Angle)+y_CMD*sin(m1_Angle)+yaw_CMD*robot_radius*(-1);
+	//w2_speed = this->x_CMD*cos(m2_Angle)+y_CMD*sin(m2_Angle)+yaw_CMD*robot_radius*(-1);
+	//w3_speed = this->x_CMD*cos(m3_Angle)+y_CMD*sin(m3_Angle)+yaw_CMD*robot_radius*(-1);
+	x_CMD = *(this->base_robotCMD->x_speed);
+	y_CMD = *(this->base_robotCMD->y_speed);
+	yaw_CMD = *(this->base_robotCMD->yaw_speed);
+/*
 	for(int i=0;i<10;i++){
 		if(fabs(w1_speed)>100||fabs(w2_speed)>100||fabs(w3_speed)>100){
 			w1_speed = w1_speed*0.9;
@@ -470,7 +521,7 @@ void Base_Control::inverseKinematics()
 			break;
 		}
 	}
-	speed_regularization(w1_speed, w2_speed, w3_speed);
+*/	speed_regularization(w1_speed, w2_speed, w3_speed);
 #ifdef DEBUG
 	std::cout << "Inverse kinematics(DEBUG)\n";
 	std::cout << std::dec;
