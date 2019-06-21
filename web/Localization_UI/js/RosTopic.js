@@ -22,7 +22,7 @@ function HoldBallSwitch(state,robot) {
     HoldBall1.publish(check);
 }
 //=====================================================================================
-// hold ball
+//ball
 var ball = new ROSLIB.Topic({
     ros: ros,
     name: '/vision/object',

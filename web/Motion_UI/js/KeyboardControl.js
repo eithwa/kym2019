@@ -106,22 +106,30 @@ function keysdown(e) {
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
         } else if (keys[69]) {
-            //if (speed > 30)
-            //    speed = speed * 0.5;
+            var speed_;
+            if (Math.abs(parseFloat(speed)) > 15){
+              speed_ = parseFloat(speed) * 0.5;
+            }else{
+              speed_ = speed;
+            }
             vec3 = new ROSLIB.Message({
                 x: 0,
                 y: 0,
-                z: -parseFloat(speed)
+                z: -parseFloat(speed_)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
         } else if (keys[81]) {
-            //if (speed > 30)
-            //    speed = speed * 0.5;
+            var speed_;
+            if (Math.abs(parseFloat(speed)) > 15){
+              speed_ = parseFloat(speed) * 0.5;
+            }else{
+              speed_ = speed;
+            }
             vec3 = new ROSLIB.Message({
                 x: 0,
                 y: 0,
-                z: parseFloat(speed)
+                z: parseFloat(speed_)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -173,7 +181,7 @@ function releasebutton(state) {
 
 function keyuped(e) {
     if (start) {
-        //console.log(1111);
+      console.log("start moving");
         if (keys[e.keyCode] == true) releasebutton(e.keyCode);
         //else if (keys[69] == true) releasebutton(69);
         //else if (keys[87] == true) releasebutton(87);

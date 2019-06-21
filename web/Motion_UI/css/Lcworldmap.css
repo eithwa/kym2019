@@ -15,6 +15,7 @@ body {
 
 /*====================WIFI============================*/
 
+
 #InterfaceSetting {
     position: absolute;
     left: 380px;
@@ -144,7 +145,7 @@ body {
 
 #Joystick {
     position: relative;
-    top: 50%;
+    top: 65%;
     left: 60%;
     width: 210px;
     height: 210px;
@@ -245,6 +246,18 @@ body {
     background-color: #FFCC00;
     font-size: 17px;
     color: #1A1A65;
+}
+/*===========================================*/
+#HoldBallButton1 {
+    position: relative;
+    left: 13px;
+    top: 0px;
+}
+/*===========================================*/
+#ShootDiv {
+    position: relative;
+    left: 13px;
+    top: 10px; 
 }
 /*===========================================*/
 #info { 
