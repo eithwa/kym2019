@@ -197,7 +197,6 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
     if(back_flag==true)center_circle_rangle=0.8;
     if(_Target.TargetPoint[_CurrentTarget].x==0&&_Target.TargetPoint[_CurrentTarget].y==0){
         //std::cout<<sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y)<<"  "<<center_circle_rangle<<std::endl;
-        
         if (sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){
             //std::cout<<Robot.pos.x<<" "<<Robot.pos.y<<std::endl;
             if (_CurrentTarget == _Target.size){
@@ -222,6 +221,36 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
                
             }
         }
+        //========================
+        //穿過中心偵測
+        //y-y1=((y2-y1)/(x2-x1))*(x-x1)
+        //m=(y2-y1)/(x2-x1)
+        //m*x-m*x1=y-y1
+        //m*x-m*x1-y+y1=0
+        //(y2-y1)x-(x2-x1)y-(y2-y1)x1+(x2-x1)y1=0
+        //ax+by+c=0
+        //a=(y2-y1)
+        //b=-(x2-x1)
+        //c=-(y2-y1)x1+(x2-x1)y1
+        //線外一點P到直線L距離為d(P,L)
+        //d(P,L)=abs(ax0+by0+c)/sqrt(a*a+b*b)
+        if (_CurrentTarget != _Target.size){
+            int x1=Robot.pos.x;
+            int y1=Robot.pos.y;
+            int x2=_Target.TargetPoint[_CurrentTarget+1].x;
+            int y2_Target.TargetPoint[_CurrentTarget+1].y;
+            double a=y2-y1;
+            double b=-(x2-x1);
+            double c=-(y2-y1)*x1+(x2-x1)*y1;
+            int x0=0;
+            int y0=0;
+            double d_PL=abs(a*x0+b*y0+c)/sqrt(a*a+b*b);
+            if(d_PL<0.4){
+                _LocationState = turn;
+                _CurrentTarget++;
+            }
+        }        
+        //========================
     }
     if (fabs(v_x) <= 0.2 && fabs(v_y) <= 0.2)
     {
@@ -376,7 +405,7 @@ int Strategy::ThroughPath(int i, int j)
     if (Slope > 999)
         Slope = 999;
     double dis = (_Location->LocationPoint[j].y - Slope * _Location->LocationPoint[j].x) / sqrt(Slope * Slope + 1);
-    if (fabs(dis) < 0.2)
+    if (fabs(dis) < 0.0)
         return TRUE;
     else
         return FALSE;
