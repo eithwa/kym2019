@@ -415,7 +415,7 @@ function PublishTopicCmdVel(vec3) {
         }
     });
     if (RemoteState) {
-      //console.log(twist);
+      console.log(twist);
       cmdVel1.publish(twist);
     }
 }
