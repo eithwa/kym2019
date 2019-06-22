@@ -31,6 +31,9 @@ var ball = new ROSLIB.Topic({
 ball.subscribe(function(msg) {
     ball_distance = msg.ball_dis;
     ball_angle = msg.ball_ang;
+
+    document.getElementById('ball_ang').innerText = Math.round(ball_angle)+" °";
+    document.getElementById('ball_dis').innerText = Math.round(ball_distance)+" cm";
     //imu_3d_w=-msg.yaw+90/180*Math.PI;
     //console.log(msg.yaw);
 });
