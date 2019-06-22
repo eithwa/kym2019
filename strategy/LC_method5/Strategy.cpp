@@ -184,15 +184,15 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
     v_x = v_x_temp;
     v_y = v_y_temp;
     v_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
-    //    <<<<<<<  HEAD  kym code in 2019.6.15
     Normalization(v_yaw);
-    if(back_flag==true){
-        if(v_yaw<0){
-            v_yaw=180+v_yaw;
-        }else{
-            v_yaw=v_yaw-180;        
-        }
-    }
+    //    <<<<<<<  HEAD  kym code in 2019.6.15
+    //if(back_flag==true){
+    //    if(v_yaw<0){
+    //        v_yaw=180+v_yaw;
+    //    }else{
+    //        v_yaw=v_yaw-180;        
+    //    }
+    //}
     //    >>>>>>>>  END   kym code in 2017.6.15
     double center_circle_rangle=0.5;
     if(back_flag==true)center_circle_rangle=0.8;
@@ -213,11 +213,11 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
                 double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
                 Normalization(next_yaw);
                 //std::cout<<next_yaw<<std::endl;
-                if(abs(next_yaw)>90){
-                    back_flag=true;    
-                }else{
-                    back_flag=false;                
-                }
+                //if(abs(next_yaw)>90){
+                //    back_flag=true;    
+                //}else{
+                //    back_flag=false;                
+                //}
                 //    >>>>>>>>  END   kym code in 2017.6.15
                 flag = TRUE;
                
@@ -237,11 +237,11 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
             double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
             Normalization(next_yaw);
             //std::cout<<next_yaw<<std::endl;
-            if(abs(next_yaw)>90){
-                back_flag=true;    
-            }else{
-                back_flag=false;                
-            }
+            //if(abs(next_yaw)>90){
+            //    back_flag=true;    
+            //}else{
+            //    back_flag=false;                
+            //}
             //    >>>>>>>>  END   kym code in 2017.6.15
             flag = TRUE;            
         }
@@ -272,10 +272,10 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
         double d_PL=fabs(a*x0+b*y0+c)/sqrt(a*a+b*b);
         if(d_PL<0.4){
             std::cout<<"cross center"<<std::endl;
+            cross_center_flag = true;
             //std::cout<<a<<" "<<b<<" "<<c<<" "<<d_PL<<std::endl;
             _LocationState = turn;
             _CurrentTarget++;
-            cross_center_flag = true;
         }
     }
     //========================
@@ -302,11 +302,11 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
         double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
         Normalization(next_yaw);
         //std::cout<<next_yaw<<std::endl;
-        if(abs(next_yaw)>90){
-            back_flag=true;    
-        }else{
-            back_flag=false;                
-        }
+        //if(abs(next_yaw)>90){
+        //    back_flag=true;    
+        //}else{
+        //    back_flag=false;                
+        //}
         //    >>>>>>>>  END   kym code in 2017.6.15
         if (_CurrentTarget > _Target.size)
         {
@@ -340,16 +340,16 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
     v_yaw = vector_tr.yaw; // turn to target
     //    <<<<<<<  HEAD  kym code in 2019.6.15
     Normalization(v_yaw);
-    if(back_flag==true){
-        if(v_y>0){
-            v_y=-v_y;
-        }
-        if(v_yaw<0){
-            v_yaw=180+v_yaw;
-        }else{
-            v_yaw=v_yaw-180;        
-        }
-    }
+    //if(back_flag==true){
+    //    if(v_y>0){
+    //        v_y=-v_y;
+    //    }
+    //    if(v_yaw<0){
+    //        v_yaw=180+v_yaw;
+    //    }else{
+    //        v_yaw=v_yaw-180;        
+    //    }
+    //}
     //    >>>>>>>>  END   kym code in 2017.6.15
     
     if (fabs(v_yaw) <= 5)
@@ -407,7 +407,6 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
         }
         //_LocationState = finish;
     }
-
     //break;
 }
 int Strategy::ThroughPath(int i, int j)

@@ -56,6 +56,7 @@ foreach(subdir
     LC_method2
     LC_method3
     LC_method4
+    LC_method5
     )
   add_subdirectory(${subdir})
 endforeach()

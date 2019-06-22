@@ -53,8 +53,9 @@ foreach(subdir
     FIRA_teamStrategy
     defend_teamStrategy
     defend_strategy
-    LC_mothod2
-    LC_mothod3
+    LC_method2
+    LC_method3
+    LC_method4
     )
   add_subdirectory(${subdir})
 endforeach()
