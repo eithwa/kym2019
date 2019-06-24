@@ -338,7 +338,7 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
 
     //    <<<<<<<  HEAD   temp code in 2017.8.8
     // double v_strike = 0.01;
-    v_y = 0.31;  
+    v_y = -0.31;  
     v_x = 0;
     v_yaw = vector_tr.yaw; // turn to target
     //    <<<<<<<  HEAD  kym code in 2019.6.15
