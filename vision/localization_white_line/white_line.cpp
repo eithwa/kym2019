@@ -186,6 +186,7 @@ cv::Mat Vision::White_Line(const cv::Mat iframe)
             }
         }
     }
+    //畫場地
     for (int i = 0; i < threshold.rows; i++)
     {
         for (int j = 0; j < threshold.cols; j++)
