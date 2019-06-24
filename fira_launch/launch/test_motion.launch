@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
 <launch> 
- <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" output="screen"/>
+ <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
  <node name="Attack_motion" pkg="motion" type="Attack_motion_node" output="screen"/>
 </launch>
