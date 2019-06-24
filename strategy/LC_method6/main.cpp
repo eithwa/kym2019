@@ -15,7 +15,7 @@
 
 int main(int argc, char **argv)
 {
-    printf("Localization 5 : straight through pathplan (fix)!!\n");
+    printf("Localization 6 : back through pathplan !!\n");
     Environment Env = InitData(Env); // Initial new environment data
     Environment OutSpeed;
     LocationStruct Location;
