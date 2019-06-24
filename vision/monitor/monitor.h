@@ -32,4 +32,5 @@ class Vision : protected NodeHandle
 
     cv::Mat Monitor;
     cv::Mat Source;
+		cv::Mat Threshold;
 };
