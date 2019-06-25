@@ -111,7 +111,7 @@ function Mclmap(checked) {
     if (checked == true) {
         video.src = "img/black.png";
         if (ChooseRobot == 1) {
-            setTimeout(function(){video.src = 'http://' + document.getElementById('RobotIP').value + ':8080/stream?topic=/camera/image_monitor'},100);
+            setTimeout(function(){video.src = 'http://' + document.getElementById('RobotIP').value + ':8080/stream?topic=/mcl/image'},100);
             //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/mcl/image";
             //console.log(11);
         }
@@ -320,13 +320,13 @@ function GroundSwitch(checked) {
               let x_=(mouse_x-center_x)/1.33;
               let y_=(mouse_y-center_y)/1.33;
               
-              line_x = mouse_x+40 * Math.cos(mouse_angle);
-              line_y = mouse_y+40 * Math.sin(mouse_angle);
+              line_x = mouse_x+20 * Math.cos(mouse_angle);
+              line_y = mouse_y+20 * Math.sin(mouse_angle);
               //console.log(x_, y_);
               ctx.beginPath();
               ctx.lineWidth = 2;
               ctx.strokeStyle = '#FF3EFF';
-              ctx.arc(mouse_x, mouse_y, 30, 0, 2*Math.PI);
+              ctx.arc(mouse_x, mouse_y, 15, 0, 2*Math.PI);
               ctx.moveTo(mouse_x, mouse_y);
               ctx.lineTo(line_x, line_y);
               ctx.stroke();
@@ -350,9 +350,9 @@ function GroundSwitch(checked) {
                       ctx.beginPath();
                       let move_x = event.offsetX;
                       mouse_angle = angle_offset+(mouse_x-move_x)/180*pi;
-                      line_x = mouse_x+40 * Math.cos(mouse_angle);
-                      line_y = mouse_y+40 * Math.sin(mouse_angle);
-                      ctx.arc(mouse_x, mouse_y, 30, 0, 2*Math.PI);
+                      line_x = mouse_x+20 * Math.cos(mouse_angle);
+                      line_y = mouse_y+20 * Math.sin(mouse_angle);
+                      ctx.arc(mouse_x, mouse_y, 15, 0, 2*Math.PI);
                       ctx.moveTo(mouse_x, mouse_y);
                       ctx.lineTo(line_x, line_y);
                       ctx.stroke();
