@@ -69,6 +69,7 @@ void Vision::imageCb(const sensor_msgs::ImageConstPtr &msg)
         FrameRate = Rate();
         RateMsg = FrameRate;
         Monitor = Source.clone();
+        source2threshold();
         ObjectProcessing();
         Pub_monitor(Monitor);
         Pub_object();
@@ -79,6 +80,39 @@ void Vision::imageCb(const sensor_msgs::ImageConstPtr &msg)
         ROS_ERROR("Could not convert to image!");
         return;
     }
+}
+void Vision::source2threshold(){
+    //======================threshold===================
+    Mat iframe = Source.clone();
+    Mat threshold(iframe.rows, iframe.cols, CV_8UC3, Scalar(0, 0, 0));
+    for (int i = 0; i < iframe.rows; i++)
+    {
+        for (int j = 0; j < iframe.cols; j++)
+        {
+            unsigned char gray = (iframe.data[(i * iframe.cols * 3) + (j * 3) + 0] + iframe.data[(i * iframe.cols * 3) + (j * 3) + 1] + iframe.data[(i * iframe.cols * 3) + (j * 3) + 2]) / 3;
+            if (gray < BlackGrayMsg)
+            {
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 0] = 0;
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 1] = 0;
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 2] = 0;
+            }
+            else
+            {
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 0] = 255;
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 1] = 255;
+                threshold.data[(i * threshold.cols * 3) + (j * 3) + 2] = 255;
+            }
+        }
+    }
+
+    //開操作 (去除一些噪點)
+    Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
+    morphologyEx(threshold, threshold, MORPH_OPEN, element);
+
+    //閉操作 (連接一些連通域)
+    morphologyEx(threshold, threshold, MORPH_CLOSE, element);
+
+    Threshold=threshold.clone();
 }
 //===============================物件分割=======================================
 void Vision::ObjectProcessing()
@@ -538,41 +572,12 @@ void Vision::find_shoot_point(DetectedObject &obj_, int color)
     
     Mat iframe = Source.clone();
     Mat frame_(iframe.rows, iframe.cols, CV_8UC3, Scalar(0, 0, 0));
-    Mat threshold(iframe.rows, iframe.cols, CV_8UC3, Scalar(0, 0, 0));
+    Mat threshold=Threshold.clone();
     DetectedObject FIND_Item;//找守門員位置
     DetectedObject obj_item;
     deque<int> find_point;
     //cout<<BlackGrayMsg<<endl;
-    //======================threshold===================
-    for (int i = 0; i < iframe.rows; i++)
-    {
-        for (int j = 0; j < iframe.cols; j++)
-        {
-            unsigned char gray = (iframe.data[(i * iframe.cols * 3) + (j * 3) + 0] + iframe.data[(i * iframe.cols * 3) + (j * 3) + 1] + iframe.data[(i * iframe.cols * 3) + (j * 3) + 2]) / 3;
-            if (gray < BlackGrayMsg)
-            {
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 0] = 0;
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 1] = 0;
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 2] = 0;
-            }
-            else
-            {
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 0] = 255;
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 1] = 255;
-                threshold.data[(i * threshold.cols * 3) + (j * 3) + 2] = 255;
-            }
-        }
-    }
-
-    //開操作 (去除一些噪點)
-    Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
-    morphologyEx(threshold, threshold, MORPH_OPEN, element);
-
-    //閉操作 (連接一些連通域)
-    morphologyEx(threshold, threshold, MORPH_CLOSE, element);
-
-    Threshold=threshold.clone();
-    //================================================
+    
     
     int angle_min = obj_.ang_min;
     int angle_max = obj_.ang_max;
