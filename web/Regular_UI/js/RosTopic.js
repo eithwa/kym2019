@@ -267,6 +267,9 @@ function draw_robot(num,sigma,x,y,x_,y_,catchball,imu){
 }
 function ball_condition(){
   if(catchball2==false&&catchball3==false){
+    if(ball_ang1!=999&&ball_ang2==999&&ball_ang3==999){
+        draw_ball(x1,y1,w1,ball_ang1,ball_dis1);
+    }
     if(ball_ang2==999){
       if(ball_ang3!=999){
         draw_ball(x3,y3,w3,ball_ang3,ball_dis3);
