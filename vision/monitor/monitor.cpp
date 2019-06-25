@@ -84,33 +84,33 @@ void Vision::imageCb(const sensor_msgs::ImageConstPtr &msg)
 void Vision::ObjectProcessing()
 {
     //平行處理
-    //#pragma omp parallel sections
+    #pragma omp parallel sections
     {
-        //#pragma omp section
+        #pragma omp section
         {
             Red_Item.Reset();
         }
-        //#pragma omp section
+        #pragma omp section
         {
            Blue_Item.Reset();
         }
-        //#pragma omp section
+        #pragma omp section
         {
            Yellow_Item.Reset();
         }
     }
     draw_center();
-    //#pragma omp parallel sections
+    #pragma omp parallel sections
     {
-        //#pragma omp section
+        #pragma omp section
         {
             objectdet_change(REDITEM, Red_Item);
         }
-        //#pragma omp section
+        #pragma omp section
         {
            objectdet_change(BLUEITEM, Blue_Item);
         }
-        //#pragma omp section
+        #pragma omp section
         {
            objectdet_change(YELLOWITEM, Yellow_Item);
         }
