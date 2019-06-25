@@ -6,6 +6,7 @@ function MonitorSwitch(checked) {
     //let check = document.getElementById("CameraSwitch").checked;
 
     if (checked == true) {
+        document.getElementById('locTable').style.zIndex = "-1";
         let canvas = document.getElementById('reset_map');
         let ctx=canvas.getContext("2d");
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -50,6 +51,7 @@ function MonitorSwitch(checked) {
             // console.log(00);
         }
     } else {
+        document.getElementById('locTable').style.zIndex = "2";
         attack_way();
         
         //======================================
@@ -60,7 +62,7 @@ function MonitorSwitch(checked) {
             ctx.beginPath();
             ctx.lineWidth = 2;
             ctx.strokeStyle = '#FF3EFF';
-            ctx.arc(mouse_x, mouse_y, 30, 0, 2*Math.PI);
+            ctx.arc(mouse_x, mouse_y, 15, 0, 2*Math.PI);
             ctx.moveTo(mouse_x, mouse_y);
             ctx.lineTo(line_x, line_y);
             ctx.stroke();
@@ -87,7 +89,7 @@ function MonitorSwitch(checked) {
 function Mclmap(checked) {
     attack_way();
     var video = document.getElementById("MapCanvas");
-
+    var camera_checked = document.getElementById("CameraSwitch").checked;
     let canvas = document.getElementById("robot_map");
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,6 +97,8 @@ function Mclmap(checked) {
     canvas = document.getElementById("caution_map");
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    document.getElementById('locTable').style.zIndex = "2";
     if(reset_bool == true){
         let canvas = document.getElementById('reset_map');
         let ctx=canvas.getContext("2d");
@@ -102,7 +106,7 @@ function Mclmap(checked) {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.strokeStyle = '#FF3EFF';
-        ctx.arc(mouse_x, mouse_y, 30, 0, 2*Math.PI);
+        ctx.arc(mouse_x, mouse_y, 15, 0, 2*Math.PI);
         ctx.moveTo(mouse_x, mouse_y);
         ctx.lineTo(line_x, line_y);
         ctx.stroke();

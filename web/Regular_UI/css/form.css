@@ -522,7 +522,7 @@ table.RobotInformationTable tfoot td {
 #locTable {
     width: 450px;
     height: 80px;
-    z-index: 9999;
+    z-index: 2;
     /*border: 1px solid black;*/
     position: relative;
     top: 73.5%;
