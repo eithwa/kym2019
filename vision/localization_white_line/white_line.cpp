@@ -219,6 +219,10 @@ cv::Mat Vision::White_Line(const cv::Mat iframe)
             int y_ = r * Angle_sin[angle_be];
             int x = Frame_Area(CenterXMsg + x_, oframe.cols);
             int y = Frame_Area(CenterYMsg - y_, oframe.rows);
+            if(green_range[angle_be] <= r){
+                //cout<<"fuck"<<endl;
+                break;
+            }
             if (input.data[(y * input.cols + x) * 3 + 0] != 255)
             {
                 if (angle_be == FrontMsg)
@@ -234,10 +238,7 @@ cv::Mat Vision::White_Line(const cv::Mat iframe)
                     oframe.data[(y * oframe.cols + x) * 3 + 2] = 255;
                 }
             }
-            if(green_range[angle_be] <= r){
-                //cout<<"fuck"<<endl;
-                break;
-            }
+
             if (input.data[(y * input.cols + x) * 3 + 0] == 255)
             {
                 circle(oframe, Point(x, y), 2, Scalar(255, 0, 0), 1);
