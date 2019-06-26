@@ -51,7 +51,7 @@ function MonitorSwitch(checked) {
             // console.log(00);
         }
     } else {
-        document.getElementById('locTable').style.zIndex = "2";
+        document.getElementById('locTable').style.zIndex = "10";
         attack_way();
         
         //======================================
@@ -98,7 +98,7 @@ function Mclmap(checked) {
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    document.getElementById('locTable').style.zIndex = "2";
+    document.getElementById('locTable').style.zIndex = "10";
     if(reset_bool == true){
         let canvas = document.getElementById('reset_map');
         let ctx=canvas.getContext("2d");
