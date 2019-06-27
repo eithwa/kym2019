@@ -19,7 +19,7 @@ Strategy::Strategy()
     _Env = new Environment;
     back_flag = false;
     cross_center_flag = false;
-    cincture_enable = false;
+    cincture_enable = true;
     stop_count = 0;
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 5; j++)
@@ -186,17 +186,8 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
     v_y = v_y_temp;
     v_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
     Normalization(v_yaw);
-    //    <<<<<<<  HEAD  kym code in 2019.6.15
-    //if(back_flag==true){
-    //    if(v_yaw<0){
-    //        v_yaw=180+v_yaw;
-    //    }else{
-    //        v_yaw=v_yaw-180;        
-    //    }
-    //}
-    //    >>>>>>>>  END   kym code in 2017.6.15
-    double center_circle_rangle=0.5;
-    if(back_flag==true)center_circle_rangle=0.8;
+
+    double center_circle_rangle=0.4;
     if(_Target.TargetPoint[_CurrentTarget].x==0&&_Target.TargetPoint[_CurrentTarget].y==0){
         //std::cout<<sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y)<<"  "<<center_circle_rangle<<std::endl;
         if (sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){
@@ -211,16 +202,6 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
                 _CurrentTarget++;
                 cross_center_flag = false;
                 cincture_enable = true;
-                //    <<<<<<<  HEAD  kym code in 2019.6.15
-                double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
-                Normalization(next_yaw);
-                //std::cout<<next_yaw<<std::endl;
-                //if(abs(next_yaw)>90){
-                //    back_flag=true;    
-                //}else{
-                //    back_flag=false;                
-                //}
-                //    >>>>>>>>  END   kym code in 2017.6.15
                 flag = TRUE;
                
             }
@@ -236,52 +217,9 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
             _CurrentTarget++;
             cross_center_flag = false;
             cincture_enable = true;
-            //    <<<<<<<  HEAD  kym code in 2019.6.15
-            double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
-            Normalization(next_yaw);
-            //std::cout<<next_yaw<<std::endl;
-            //if(abs(next_yaw)>90){
-            //    back_flag=true;    
-            //}else{
-            //    back_flag=false;                
-            //}
-            //    >>>>>>>>  END   kym code in 2017.6.15
             flag = TRUE;            
         }
     }
-    //========================
-    //穿過中心偵測
-    //y-y1=((y2-y1)/(x2-x1))*(x-x1)
-    //m=(y2-y1)/(x2-x1)
-    //m*x-m*x1=y-y1
-    //m*x-m*x1-y+y1=0
-    //(y2-y1)x-(x2-x1)y-(y2-y1)x1+(x2-x1)y1=0
-    //ax+by+c=0
-    //a=(y2-y1)
-    //b=-(x2-x1)
-    //c=-(y2-y1)x1+(x2-x1)y1
-    //線外一點P到直線L距離為d(P,L)
-    //d(P,L)=abs(ax0+by0+c)/sqrt(a*a+b*b)
-    if (_Target.TargetPoint[_CurrentTarget].x==0&&_Target.TargetPoint[_CurrentTarget].y==0&&_CurrentTarget != _Target.size){
-        double x1=Robot.pos.x;
-        double y1=Robot.pos.y;
-        double x2=_Target.TargetPoint[_CurrentTarget+1].x;
-        double y2=_Target.TargetPoint[_CurrentTarget+1].y;
-        double a=y2-y1;
-        double b=-(x2-x1);
-        double c=-(y2-y1)*x1+(x2-x1)*y1;
-        double x0=0;
-        double y0=0;
-        double d_PL=fabs(a*x0+b*y0+c)/sqrt(a*a+b*b);
-        if(d_PL<0.4){
-            std::cout<<"cross center"<<std::endl;
-            cross_center_flag = true;
-            //std::cout<<a<<" "<<b<<" "<<c<<" "<<d_PL<<std::endl;
-            _LocationState = turn;
-            _CurrentTarget++;
-        }
-    }
-    //========================
 }
 void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, double imu, int &flag, double absolute_front)
 {
@@ -291,6 +229,7 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
     vector_tr.x = _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x;
     vector_tr.y = _Target.TargetPoint[_CurrentTarget].y - Robot.pos.y;
     vector_tr.yaw = atan2(vector_tr.y, vector_tr.x) * RAD2DEG - absolute_front;
+    Normalization(vector_tr.yaw);
     double distance = sqrt(vector_tr.x*vector_tr.x+vector_tr.y*vector_tr.y);
 
     //if (distance < 0.5)
@@ -320,80 +259,79 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
             _LocationState = finish;
         }
     }
-    //    <<<<<<<  HEAD   origin code in 2017.8.8
-    // v_y = 0.7;   // old value is 0.7 
-    // v_x = 0;
-    // v_yaw = vector_tr.yaw; // turn to target
-    // Normalization(v_yaw);
-    // if (fabs(v_yaw) <= 35)
-    // {
-    //     printf("Special slow motion \n");
-    //     v_x = 0;
-    //     v_y = 0;
-    //     v_yaw = vector_tr.yaw; // turn to target
-    //     if (fabs(v_yaw) <= 3)
-    //     {
-    //         printf("Change mode to forward \n");
-    //         _LocationState = forward;
-    //     }
-    // }
-    //    <<<<<<<  END    origin code in 2017.8.8
-
-    //    <<<<<<<  HEAD   temp code in 2017.8.8
-    // double v_strike = 0.01;
 
     bool chase_enable=false;
-    //if(_Param->Strategy.HoldBall_Condition.size()==5){
-    //    chase_enable = _Param->Strategy.HoldBall_Condition[4];
+    if(_Param->Strategy.HoldBall_Condition.size()==5){
+        chase_enable = _Param->Strategy.HoldBall_Condition[4];
         //std::cout<<"chase_enable_button_work"<<std::endl;
-    //}
-    if(chase_enable){
-        v_x = _Env->Robot.ball.distance * cos(_Env->Robot.ball.angle * DEG2RAD) - _Env->Robot.ball.distance * sin(_Env->Robot.ball.angle * DEG2RAD);
-        v_y = _Env->Robot.ball.distance * sin(_Env->Robot.ball.angle * DEG2RAD) + _Env->Robot.ball.distance * cos(_Env->Robot.ball.angle * DEG2RAD);
+    }
+    if(!chase_enable){
+        v_y = 0.31;
+        v_x = 0;
         v_yaw = vector_tr.yaw; // turn to target
-    }else{
-        double pre_x = _Target.TargetPoint[_CurrentTarget-1].x - Robot.pos.x;
-        double pre_y = _Target.TargetPoint[_CurrentTarget-1].y - Robot.pos.y;
-        double pre_yaw = atan2(pre_y , pre_x) * RAD2DEG - absolute_front;
-        double pre_dis = sqrt(pre_x*pre_x+pre_y*pre_y);
 
+    
+        if (fabs(v_yaw) <= 5)
+        {
+            printf("Change mode to forward \n");
+            _LocationState = forward;
+            cincture_enable = false;
+        }
+
+    }else{
+        double pre_x = -(_Env->Robot.ball.distance * sin((_Env->Robot.ball.angle) * DEG2RAD));
+        double pre_y = _Env->Robot.ball.distance * cos((_Env->Robot.ball.angle) * DEG2RAD);
+        double pre_yaw = _Env->Robot.ball.angle;
+        double pre_dis = _Env->Robot.ball.distance;
+        static int pre_pre_yaw = _Env->Robot.ball.angle;
+        double lost_ball_dis = _Param->Strategy.HoldBall_Condition[3];
+        double lost_ball_angle = _Param->Strategy.HoldBall_Condition[2];
+        static int rotate_way = 1;
         if(cincture_enable){
-            v_yaw = pre_yaw;          
+            v_yaw = pre_yaw;
             if(pre_yaw>15){
                 v_x = 0; 
             }else{
-                v_x = 0.31*(100-pre_yaw*3)/100;
+                v_x = 0.31*(100-pre_yaw)*0.9/100;
             }
-            v_y = pre_dis-0.4;
-            if(pre_dis<0.35){
+            if(fabs(vector_tr.yaw)<15){
+                if(v_x>0.1)v_x = 0.1;
+                //std::cout<<vector_tr.yaw<<std::endl;
+            }
+            if(vector_tr.yaw<0)v_x=v_x*(-1);
+            v_y = pre_dis-lost_ball_dis;
+            if(pre_dis<lost_ball_dis){
                 v_yaw = 0;
                 v_x = 0;
             }
-            if(abs(pre_yaw)<5&&abs(vector_tr.yaw)<5&&abs(pre_yaw-vector_tr.yaw)<20){
+            if(fabs(pre_yaw)<7&&fabs(vector_tr.yaw)<7&&fabs(pre_yaw-vector_tr.yaw)<20){
                 cincture_enable = false;
+                 _LocationState = forward;
             }
-            std::cout<<"fuck\n";
+            //std::cout<<"fuck\n";
         }else{
             v_y = 0.31;
             v_x = 0;
             v_yaw = vector_tr.yaw; // turn to target
         }
+        pre_pre_yaw = vector_tr.yaw;
 
     }
      Normalization(v_yaw);
 
-    /*
-    if (fabs(v_yaw) <= 5)
-    {
-        printf("Change mode to forward \n");
-        _LocationState = forward;
-        cincture_enable = false;
-    }
-*/
     //    <<<<<<<  END    temp code in 2017.8.8
 }
-void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
+void Strategy::Chase(RobotData &Robot, double &v_x, double &v_y, double &v_yaw)
 {
+    
+    double imu = _Env->Robot.pos.angle;
+    double absolute_front = imu + 90;
+    Normalization(absolute_front);
+    Vector3D vector_tr;
+    vector_tr.x = _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x;
+    vector_tr.y = _Target.TargetPoint[_CurrentTarget].y - Robot.pos.y;
+    vector_tr.yaw = atan2(vector_tr.y, vector_tr.x) * RAD2DEG - absolute_front;
+
     double ball_dis = _Env->Robot.ball.distance;
     double ball_ang = _Env->Robot.ball.angle;
     double lost_ball_dis = _Param->Strategy.HoldBall_Condition[3];
@@ -401,46 +339,36 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
     double hold_ball_dis = _Param->Strategy.HoldBall_Condition[1];
     double hold_ball_angle = _Param->Strategy.HoldBall_Condition[0];
     
-    //rotate chase
-    //v_x = _Env->Robot.ball.distance * cos(_Env->Robot.ball.angle * DEG2RAD) - _Env->Robot.ball.distance * sin(_Env->Robot.ball.angle * DEG2RAD);
-    //v_y = _Env->Robot.ball.distance * sin(_Env->Robot.ball.angle * DEG2RAD) + _Env->Robot.ball.distance * cos(_Env->Robot.ball.angle * DEG2RAD);
-    v_yaw = _Env->Robot.ball.angle;
+    double pre_x = -(_Env->Robot.ball.distance * sin((_Env->Robot.ball.angle) * DEG2RAD));
+    double pre_y = _Env->Robot.ball.distance * cos((_Env->Robot.ball.angle) * DEG2RAD);
+    double pre_yaw = _Env->Robot.ball.angle;
+    double pre_dis = _Env->Robot.ball.distance;
+    static int pre_pre_yaw = _Env->Robot.ball.angle;
 
-    //straight chase
-    v_x = -(_Env->Robot.ball.distance * sin((_Env->Robot.ball.angle) * DEG2RAD));
-    v_y = _Env->Robot.ball.distance * cos((_Env->Robot.ball.angle) * DEG2RAD);
-    v_yaw = _Env->Robot.ball.angle;
+    static int rotate_way = 1;
+
+    v_yaw = pre_yaw;
+    if(pre_yaw>15){
+        v_x = 0; 
+    }else{
+        v_x = 0.31*(100-pre_yaw)*0.9/100;
+    }
+    if(fabs(vector_tr.yaw)<15){
+        if(v_x>0.1)v_x = 0.1;
+        //std::cout<<vector_tr.yaw<<std::endl;
+    }
+    if(vector_tr.yaw<0)v_x=v_x*(-1);
+    v_y = pre_dis-lost_ball_dis;
+    if(pre_dis<lost_ball_dis){
+        v_yaw = 0;
+        v_x = 0;
+    }
+    if(fabs(pre_yaw)<7&&fabs(vector_tr.yaw)<7&&fabs(pre_yaw-vector_tr.yaw)<20){
+        cincture_enable = false;
+         _LocationState = forward;
+    }
     
-
-    if(ball_dis>0.5&&fabs(ball_ang)>20){
-        v_y=v_y*0.5;
-        v_x=v_x*0.5;
-        v_yaw=v_yaw*1.3;
-        if(v_yaw>180)v_yaw=180;
-        if(v_yaw<-180)v_yaw=-180;
-    }
-    if(fabs(ball_ang)>20&&ball_dis<lost_ball_dis){
-        v_x = -v_x;
-        v_y=0;
-        v_yaw = v_yaw;
-        std::cout<<"back case\n";
-    }
-    if(fabs(ball_ang)<7&&ball_dis<1){
-        v_x = v_x;        
-        v_y = 1.5;
-        v_yaw = v_yaw;
-        std::cout<<"stright case\n";
-    }
-
-    if(ball_dis < hold_ball_dis && fabs(ball_ang) < hold_ball_angle){
-        _LocationState = turn;
-        if( cross_center_flag == true){
-            _CurrentTarget--;
-            cross_center_flag = false;
-        }
-        //_LocationState = finish;
-    }
-    //break;
+    pre_pre_yaw = vector_tr.yaw;
 }
 int Strategy::ThroughPath(int i, int j)
 {
@@ -448,10 +376,11 @@ int Strategy::ThroughPath(int i, int j)
     if (Slope > 999)
         Slope = 999;
     double dis = (_Location->LocationPoint[j].y - Slope * _Location->LocationPoint[j].x) / sqrt(Slope * Slope + 1);
-    if (fabs(dis) < 0.0)
-        return TRUE;
-    else
-        return FALSE;
+    //if (fabs(dis) < 0.0)
+    //    return TRUE;
+    //else
+    //    return FALSE;
+    return FALSE;
 }
 std::vector<int> Strategy::OptimatePath()
 {
