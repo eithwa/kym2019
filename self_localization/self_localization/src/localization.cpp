@@ -185,14 +185,14 @@ void Localization::velCallback(const geometry_msgs::Twist msg)
                 vy=vy_;
                 vw=vw_;
             }
-            if(fabs(vx_)<0.4||fabs(vy_)<0.4){
+            if(fabs(vx_)<0.6||fabs(vy_)<0.6){
                 vx=vx_;
                 vy=vy_;
             }
-            if(fabs(vw_)<5){
+            if(fabs(vw_)<15){
                 vw=vw_;
             }
-            if(abs(vx)>8||abs(vy)>8||abs(vw)>20){
+            if(abs(vx)>8||abs(vy)>8||abs(vw)>35){
                 //cout<<"vw>30";
                 vx=0;
                 vy=0;
