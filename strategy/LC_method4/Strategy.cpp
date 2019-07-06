@@ -99,10 +99,18 @@ void Strategy::StrategyLocalization2()
     }
     if(chase_enable){
         if(_Env->Robot.ball.distance > lost_ball_dis || fabs(_Env->Robot.ball.angle) > lost_ball_angle){
+            double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
+            Normalization(next_yaw);
+            //std::cout<<next_yaw<<std::endl;
+            if(abs(next_yaw)>90||fabs(Robot.pos.y)>2.0||fabs(Robot.pos.x)>3.0){
+                back_flag=true;    
+            }else{
+                back_flag=false;                
+            }
             _LocationState = chase;
              //_Param->NodeHandle.SPlanning_Velocity[3]=20;
         }else{
-
+            //do nothing
         }
     }
     //if(_Env->Robot.ball.distance > lost_ball_dis || fabs(_Env->Robot.ball.angle) > lost_ball_angle){
@@ -193,9 +201,16 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
             v_yaw=v_yaw-180;        
         }
     }
-    //    >>>>>>>>  END   kym code in 2017.6.15
-    double center_circle_rangle=0.5;
-    if(back_flag==true)center_circle_rangle=0.8;
+    if(hypot(v_x,v_y)<0.5){
+        v_yaw = 0;
+    }
+    //double VelocityMax = _Param->NodeHandle.SPlanning_Velocity[2];
+    //double VelocityMin = _Param->NodeHandle.SPlanning_Velocity[3];
+    //double AngularVelocityMax = _Param->NodeHandle.SPlanning_Velocity[4];
+    //double AngularVelocityMin = _Param->NodeHandle.SPlanning_Velocity[5];
+    //    >>>>>>>>  END   kym code in 2019.6.15
+    double center_circle_rangle=0.4;
+    if(back_flag==true)center_circle_rangle=0.7;
     if(_Target.TargetPoint[_CurrentTarget].x==0&&_Target.TargetPoint[_CurrentTarget].y==0){
         //std::cout<<sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y)<<"  "<<center_circle_rangle<<std::endl;
         if (sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){
@@ -218,7 +233,7 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
                 }else{
                     back_flag=false;                
                 }
-                //    >>>>>>>>  END   kym code in 2017.6.15
+                //    >>>>>>>>  END   kym code in 2019.6.15
                 flag = TRUE;
                
             }
@@ -242,7 +257,7 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
             }else{
                 back_flag=false;                
             }
-            //    >>>>>>>>  END   kym code in 2017.6.15
+            //    >>>>>>>>  END   kym code in 2019.6.15
             flag = TRUE;            
         }
     }
@@ -392,9 +407,9 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
         v_yaw = v_yaw;
         std::cout<<"back case\n";
     }
-    if(fabs(ball_ang)<7&&ball_dis<1){
+    if(fabs(ball_ang)<5&&ball_dis<0.6){
         v_x = v_x;        
-        v_y = 1.5;
+        v_y = 1.0;
         v_yaw = v_yaw;
         std::cout<<"stright case\n";
     }
@@ -405,10 +420,7 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
             _CurrentTarget--;
             cross_center_flag = false;
         }
-        //_LocationState = finish;
     }
-
-    //break;
 }
 int Strategy::ThroughPath(int i, int j)
 {
@@ -416,10 +428,11 @@ int Strategy::ThroughPath(int i, int j)
     if (Slope > 999)
         Slope = 999;
     double dis = (_Location->LocationPoint[j].y - Slope * _Location->LocationPoint[j].x) / sqrt(Slope * Slope + 1);
-    if (fabs(dis) < 0.0)
-        return TRUE;
-    else
-        return FALSE;
+    //if (fabs(dis) < 0.0)
+    //    return TRUE;
+    //else
+    //    return FALSE;
+    return FALSE;
 }
 std::vector<int> Strategy::OptimatePath()
 {
