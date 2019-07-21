@@ -19,6 +19,7 @@ Strategy::Strategy()
     _Env = new Environment;
     back_flag = false;
     cross_center_flag = false;
+    start_chase_flag = false;
     stop_count = 0;
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 5; j++)
@@ -108,7 +109,13 @@ void Strategy::StrategyLocalization2()
                 back_flag=false;                
             }
             _LocationState = chase;
-             //_Param->NodeHandle.SPlanning_Velocity[3]=20;
+            if(start_chase_flag==false){
+                max_speed = _Param->NodeHandle.SPlanning_Velocity[2];
+                min_speed = _Param->NodeHandle.SPlanning_Velocity[3];
+                _Param->NodeHandle.SPlanning_Velocity[2]=60;
+                _Param->NodeHandle.SPlanning_Velocity[3]=40;
+            }
+            start_chase_flag = true;
         }else{
             //do nothing
         }
@@ -415,6 +422,9 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
     }
 
     if(ball_dis < hold_ball_dis && fabs(ball_ang) < hold_ball_angle){
+        _Param->NodeHandle.SPlanning_Velocity[2]=max_speed;
+        _Param->NodeHandle.SPlanning_Velocity[3]=min_speed;
+        start_chase_flag = false;
         _LocationState = turn;
         if( cross_center_flag == true){
             _CurrentTarget--;

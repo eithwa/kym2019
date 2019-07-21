@@ -55,7 +55,9 @@ class Strategy
     int _Last_state;
     bool back_flag;
     bool cross_center_flag;
-
+    bool start_chase_flag;
+    double max_speed;
+    double min_speed;
     int through_path_ary[5][5];
     TargetStruct _Target;
     LocationStruct *_Location;
