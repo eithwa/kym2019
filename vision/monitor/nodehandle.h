@@ -26,8 +26,8 @@
 #define BLUEITEM 0x04
 #define YELLOWITEM 0x08
 #define WHITEITEM 0x10 //WHITEITEM=robot
-#define VISION_TOPIC "/camera/image_raw"
-#define USB_CAM_TOPIC "/usb_cam/image_raw"
+#define VISION_TOPIC "camera/image_raw"
+#define USB_CAM_TOPIC "usb_cam/image_raw"
 #define YAML_PATH ros::package::getPath("vision") + "/config/FIRA.yaml"
 #define BIN_PATH ros::package::getPath("vision") + "/config/HSVcolormap.bin"
 #define IMAGE "/src/vision/1.bmp"
@@ -122,11 +122,11 @@ class NodeHandle
     int Angle_range_2_3Msg;
     int Unscaned_Angle[8];
     //================white===================
-	int WhiteGrayMsg;
-	int WhiteAngleMsg;
+    int WhiteGrayMsg;
+    int WhiteAngleMsg;
     //================black===================
-	int BlackGrayMsg;
-	int BlackAngleMsg;
+    int BlackGrayMsg;
+    int BlackAngleMsg;
     //========================================
   private:
     ros::NodeHandle nh;
