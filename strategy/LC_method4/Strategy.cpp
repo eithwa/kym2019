@@ -300,6 +300,11 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
             cross_center_flag = true;
         }
     }
+    if(cross_center_flag==true){
+        if(sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){
+            cross_center_flag=false;
+        }
+    }
     //========================
 }
 void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, double imu, int &flag, double absolute_front)
@@ -380,6 +385,13 @@ void Strategy::Turn(RobotData &Robot, double &v_x, double &v_y, double &v_yaw, d
         _LocationState = forward;
     }
     //    <<<<<<<  END    temp code in 2017.8.8
+    double center_circle_rangle=0.4;
+    if(back_flag==true)center_circle_rangle=0.7;
+    if(cross_center_flag==true){
+        if(sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){
+            cross_center_flag=false;
+        }
+    }
 }
 void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
 {
