@@ -112,8 +112,12 @@ void Strategy::StrategyLocalization2()
             if(start_chase_flag==false){
                 max_speed = _Param->NodeHandle.SPlanning_Velocity[2];
                 min_speed = _Param->NodeHandle.SPlanning_Velocity[3];
-                _Param->NodeHandle.SPlanning_Velocity[2]=60;
-                _Param->NodeHandle.SPlanning_Velocity[3]=40;
+                if(max_speed>60){
+                    _Param->NodeHandle.SPlanning_Velocity[2]=60;
+                }
+                if(min_speed>40){
+                    _Param->NodeHandle.SPlanning_Velocity[3]=40;
+                }
             }
             start_chase_flag = true;
         }else{
