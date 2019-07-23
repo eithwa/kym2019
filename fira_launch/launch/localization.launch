@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <launch> 
+ <rosparam command="load" file="$(find vision)/config/prosilica_driver.yaml" ns="prosilica_driver" />
+ <rosparam command="load" file="$(find fira_launch)/default_config/vision_better.yaml" />
  <rosparam command="load" file="$(find self_localization)/config/localization.yaml" ns="FIRA"/>
  <rosparam command="load" file="$(find vision)/config/FIRA.yaml" ns="FIRA/vision"/>
- <rosparam command="load" file="$(find vision)/config/prosilica_driver.yaml" ns="prosilica_driver" />
+
  <param name="FIRA/RobotNumber" value="1"/>
  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
  <node name="mjpeg_server" pkg="mjpeg_server" type="mjpeg_server" respawn="true" respawn_delay="5"/>
