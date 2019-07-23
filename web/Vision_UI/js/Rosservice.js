@@ -29,11 +29,17 @@ function savecall(){
     }
   );
   //==============
-  vison_better_Client.callService(vision_better_request, function(res) {
-      if (res.update == 2) {
-          console.log('Parameter is saved');
+  vison_better_Client.callService(vision_better_request, 
+    function(vision_better_request) {
+      if (vision_better_request.update == 2) {
+        console.log('Parameter is saved');
       }
-  });
+    },
+    function(message){
+      console.log("SAVE FAILED");
+      //SendMsgs('儲存參數失敗',"red");
+    }
+  );
 }
 //================================
 var connectClient = new ROSLIB.Service({
