@@ -6,7 +6,16 @@ var paramClient = new ROSLIB.Service({
 
 var param_request = new ROSLIB.ServiceRequest({
 });
+//================================
+var vison_better_Client = new ROSLIB.Service({
+  ros : ros,
+  name : 'StrategyParam',
+  serviceType : 'param_convey/strategy_param'
+});
 
+var vision_better_request = new ROSLIB.ServiceRequest({
+    receive: 1
+});
 function savecall(){
   paramClient.callService(param_request,
     function(param_request) {
@@ -17,6 +26,18 @@ function savecall(){
     function(message){
       console.log(message);
       SendMsgs('儲存參數失敗',"red");
+    }
+  );
+  //==============
+  vison_better_Client.callService(vision_better_request, 
+    function(vision_better_request) {
+      if (vision_better_request.update == 2) {
+        console.log('Parameter is saved');
+      }
+    },
+    function(message){
+      console.log("SAVE FAILED");
+      //SendMsgs('儲存參數失敗',"red");
     }
   );
 }

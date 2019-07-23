@@ -103,7 +103,8 @@ void Strategy::StrategyLocalization2()
             double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
             Normalization(next_yaw);
             //std::cout<<next_yaw<<std::endl;
-            if(abs(next_yaw)>90||fabs(Robot.pos.y)>2.0||fabs(Robot.pos.x)>3.0){
+            int edge_error = 0.5;
+            if(abs(next_yaw)>90||fabs(Robot.pos.y)>(2.0-edge_error)||fabs(Robot.pos.x)>(3.0-edge_error)){
                 back_flag=true;    
             }else{
                 back_flag=false;                
@@ -113,10 +114,10 @@ void Strategy::StrategyLocalization2()
                 max_speed = _Param->NodeHandle.SPlanning_Velocity[2];
                 min_speed = _Param->NodeHandle.SPlanning_Velocity[3];
                 if(max_speed>60){
-                    _Param->NodeHandle.SPlanning_Velocity[2]=30;
+                    _Param->NodeHandle.SPlanning_Velocity[2]=60;
                 }
-                if(min_speed>40){
-                    _Param->NodeHandle.SPlanning_Velocity[3]=20;
+                if(min_speed>30){
+                    _Param->NodeHandle.SPlanning_Velocity[3]=30;
                 }
             }
             start_chase_flag = true;
