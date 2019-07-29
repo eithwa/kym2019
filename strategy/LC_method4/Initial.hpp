@@ -27,8 +27,8 @@ Environment InitData(Environment Env)
     Env.Robot.pos.distance = 0;
     Env.Robot.ball.x = 0;
     Env.Robot.ball.y = 0;
-    Env.Robot.ball.angle = 0;
-    Env.Robot.ball.distance = 0;
+    Env.Robot.ball.angle = 999;
+    Env.Robot.ball.distance = 999;
     Env.Robot.goal.x = 0;
     Env.Robot.goal.y = 0;
     Env.Robot.goal.angle = 0;

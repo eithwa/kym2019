@@ -99,6 +99,7 @@ void Strategy::StrategyLocalization2()
         //std::cout<<"chase_enable_button_work"<<std::endl;
     }
     if(chase_enable){
+        //std::cout<<"_Env->Robot.ball.distance   "<<_Env->Robot.ball.distance <<"   _Env->Robot.ball.angle  "<<_Env->Robot.ball.angle<<std::endl;
         if(_Env->Robot.ball.distance > lost_ball_dis || fabs(_Env->Robot.ball.angle) > lost_ball_angle){
             double next_yaw = atan2(_Target.TargetPoint[_CurrentTarget].y - Robot.pos.y, _Target.TargetPoint[_CurrentTarget].x - Robot.pos.x) * RAD2DEG - absolute_front;
             Normalization(next_yaw);
@@ -431,9 +432,9 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
         v_yaw = v_yaw;
         std::cout<<"back case\n";
     }
-    if(fabs(ball_ang)<5&&ball_dis<0.6){
+    if(fabs(ball_ang)<8&&ball_dis<0.8){
         v_x = v_x;        
-        v_y = 1.0;
+        v_y = 1.5;
         v_yaw = v_yaw;
         std::cout<<"stright case\n";
     }
@@ -447,6 +448,12 @@ void Strategy::Chase(RobotData &,double &v_x, double &v_y, double &v_yaw)
             _CurrentTarget--;
             cross_center_flag = false;
         }
+    }
+    if(ball_ang==999){
+        std::cout<<"\n\n\nCANNOT SEE THE BALL!!!!\n\n\n";
+        v_x = 0;
+        v_y = 0;
+        v_yaw = 0;
     }
 }
 int Strategy::ThroughPath(int i, int j)
