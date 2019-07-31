@@ -342,7 +342,7 @@ int main(int argc,char **argv){
     
     //imshow("self_map",self_map);
     //waitKey(10);
-    ros::Rate loop_rate(50); //Image transfer speed(hz)
+    ros::Rate loop_rate(60); //Image transfer speed(hz)
 	while(ros::ok()){
         std_msgs::Int32MultiArray point_msg;
         geometry_msgs::Twist vel_msg;
