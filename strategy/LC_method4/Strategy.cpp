@@ -223,7 +223,7 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
     //double AngularVelocityMin = _Param->NodeHandle.SPlanning_Velocity[5];
     //    >>>>>>>>  END   kym code in 2019.6.15
     double center_circle_rangle=0.4;
-    if(back_flag==true)center_circle_rangle=0.7;
+    if(back_flag==true)center_circle_rangle=0.6;
     if(_Target.TargetPoint[_CurrentTarget].x==0&&_Target.TargetPoint[_CurrentTarget].y==0){
         //std::cout<<sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y)<<"  "<<center_circle_rangle<<std::endl;
         if (sqrt(Robot.pos.x*Robot.pos.x+Robot.pos.y*Robot.pos.y) <= center_circle_rangle){

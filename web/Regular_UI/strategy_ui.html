@@ -2152,7 +2152,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="form-group" id="GoalKeeperModule1">
+                        <div class="form-group" id="GoalkeeperModule1">
                             <table>
                                 <tr>
                                     <th>ConfigName</th>
@@ -2161,25 +2161,25 @@
                                 <tr>
                                     <td>(double)push_ball2opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="GoalKeeperElement1" value="0" />
+                                        <input type="text" name="GoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>(double)push_opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="GoalKeeperElement1" value="0" />
+                                        <input type="text" name="GoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>(double)push_opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="GoalKeeperElement1" value="0" />
+                                        <input type="text" name="GoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>(double)push_opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="GoalKeeperElement1" value="0" />
+                                        <input type="text" name="GoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                             </table>
@@ -3934,9 +3934,10 @@
 
         //Robot 1
         $("#SetBehaviorButton1").buttonset();
-
+        
+        $("#StateChaseModule1").show();
         $("#StateAttackModule1").hide();
-        $("#GoalKeeperModule1").hide();
+        $("#GoalkeeperModule1").hide();
         $("#StateTypeSAttackModule1").hide();
         $("#StateSideSpeedUPModule1").hide();
         $("#StateZoneAttackModule1").hide();
@@ -3947,7 +3948,7 @@
         $("#StateChase1").click(function() {
             $("#StateChaseModule1").show();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule1").hide();
@@ -3958,7 +3959,7 @@
         $("#StateAttack1").click(function() {
             $("#StateAttackModule1").show();
             $("#StateChaseModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule11").hide();
@@ -3966,8 +3967,8 @@
             $("#StrategySelectionModule1").hide();
             $("#SupportStrategyModule1").hide();
         });
-        $("#GoalKeeper1").click(function() {
-            $("#GoalKeeperModule1").show();
+        $("#Goalkeeper1").click(function() {
+            $("#GoalkeeperModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
             $("#StateTypeSAttackModule1").hide();
@@ -3981,7 +3982,7 @@
             $("#StateTypeSAttackModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule1").hide();
             $("#StateCornerKickModule1").hide();
@@ -3992,7 +3993,7 @@
             $("#StateSideSpeedUPModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateZoneAttackModule1").hide();
             $("#StateCornerKickModule1").hide();
@@ -4003,7 +4004,7 @@
             $("#StateZoneAttackModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateCornerKickModule1").hide();
@@ -4014,7 +4015,7 @@
             $("#StateCornerKickModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule1").hide();
@@ -4025,7 +4026,7 @@
             $("#StrategySelectionModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule1").hide();
@@ -4036,7 +4037,7 @@
             $("#SupportStrategyModule1").show();
             $("#StateChaseModule1").hide();
             $("#StateAttackModule1").hide();
-            $("#GoalKeeperModule1").hide();
+            $("#GoalkeeperModule1").hide();
             $("#StateTypeSAttackModule1").hide();
             $("#StateSideSpeedUPModule1").hide();
             $("#StateZoneAttackModule1").hide();
@@ -4578,3 +4579,4 @@
 </body>
 
 </html>
+

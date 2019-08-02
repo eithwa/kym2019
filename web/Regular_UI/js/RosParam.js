@@ -350,7 +350,7 @@ function GetPathplanValue() {
     $("[name=TypeSAttackElement1]").each(function() {
         TSABox1.push(parseFloat($(this).val()));
     });
-    $("[name=PGoalkeeperElement1]").each(function() {
+    $("[name=GoalkeeperElement1]").each(function() {
         PGKBox1.push(parseFloat($(this).val()));
     });
     $("[name=SideSpeedUpElement1]").each(function() {
