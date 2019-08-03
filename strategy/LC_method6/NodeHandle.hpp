@@ -57,6 +57,7 @@ class NodeHandle : public BaseNode
     ros::Subscriber LOCATIONPOINT;
     ros::Subscriber ROBOTPOSE;
     ros::Subscriber IMU;
+    ros::Subscriber CHASE;
     ros::Publisher SPEED;
     ros::Publisher PATH;
     ros::Publisher MOVE;
@@ -71,6 +72,7 @@ class NodeHandle : public BaseNode
     void subRobotPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &);
     void subLocationPoint(const std_msgs::Float32MultiArray::ConstPtr &);
     void subIMU(const imu_3d::inertia::ConstPtr &);
+    void subChase(const std_msgs::Int32::ConstPtr &);
     void Transfer(Environment *);
     void VelocityPlanning(Environment *);
 };

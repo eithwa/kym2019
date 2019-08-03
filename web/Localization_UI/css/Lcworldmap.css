@@ -700,6 +700,35 @@ body {
     color: #1A1A65;
 }
 /*==========================================================*/
+#ChaseLable {
+    text-align: center;
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 17px;
+    color: #663D00;
+    position: absolute;
+    top: 0px;
+    left: 800px;
+}
+
+#ChaseLable.ui-state-hover {
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 17px;
+    background-color: #FFF;
+}
+#ChaseLable.ui-state-focus{
+    background-image: none;
+    background-color: #FFFFFF;
+    font-size: 17px;
+    color: #663D00;
+}
+#ChaseLable.ui-state-active {
+    background-color: #FFCC00;
+    font-size: 17px;
+    color: #1A1A65;
+}
+/*==========================================================*/
 #GroundLable {
     text-align: center;
     background-image: none;

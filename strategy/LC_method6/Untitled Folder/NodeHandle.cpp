@@ -31,7 +31,7 @@ void NodeHandle::ros_comms_init()
     ROBOTPOSE = node->subscribe<geometry_msgs::PoseWithCovarianceStamped>(ROBOTPOSE_TOPIC, 1, &NodeHandle::subRobotPose, this);
     LOCATIONPOINT = node->subscribe<std_msgs::Float32MultiArray>(LOCATIONPOINT_TOPIC, 1000, &NodeHandle::subLocationPoint, this);
     IMU = node->subscribe<imu_3d::inertia>("/imu_3d", 1, &NodeHandle::subIMU, this);
-    CHASE = node->subscribe<std_msgs::Int32>("/localization/chase_enable", 1, &NodeHandle::subChase, this);
+    
 }
 void NodeHandle::setEnv(Environment *Env)
 {
@@ -84,11 +84,6 @@ void NodeHandle::subIMU(const imu_3d::inertia::ConstPtr &msg)
 {
     _Env->Robot.pos.angle = (((msg->yaw - M_PI) * RAD2DEG) > 0) ? -((msg->yaw - M_PI) * RAD2DEG - 180) : -((msg->yaw - M_PI) * RAD2DEG + 180);
 }
-void NodeHandle::subChase(const std_msgs::Int32::ConstPtr &msg)
-{
-    _Param->Strategy.HoldBall_Condition[4] = msg->data;
-    std::cout<<"chase  "<<msg->data<<std::endl;
-}
 void NodeHandle::pubSpeed(Environment *Env)
 {
     Transfer(Env);
@@ -99,8 +94,7 @@ void NodeHandle::pubSpeed(Environment *Env)
     SpeedMsg.angular.z = Env->Robot.v_yaw;
     SPEED.publish(SpeedMsg);
 }
-void NodeHandle::pubPath(Environment *Env)
-{
+void NodeHandle::pubPath(Environment *Env){
     std_msgs::Float32MultiArray PointMsg;
 
     if(_Location->LocationPoint[0].x!=0&&_Location->LocationPoint[0].y!=0){

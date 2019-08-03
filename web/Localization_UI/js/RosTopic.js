@@ -278,6 +278,26 @@ function RemoteSwitch(state) {
     Remote.publish(check);
 }
 /*========================================================*/
+var chase_pub = new ROSLIB.Topic({
+    ros: ros,
+    name: '/localization/chase_enable',
+    messageType: 'std_msgs/Int32'
+});
+function chase_switch() {
+    let enable = document.getElementById('ChaseButton').checked;
+    let chase_enable = 0;
+    if(enable){
+        chase_enable = 1;
+        console.log("追球開啟");
+    }else{
+        console.log("追球關閉");
+    }
+    var msg = new ROSLIB.Message({
+        data:chase_enable
+    });
+    chase_pub.publish(msg);
+}
+/*========================================================*/
 var imu_pub = new ROSLIB.Topic({
     ros: ros,
     name: 'imu_3d/angle_correction',

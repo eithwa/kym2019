@@ -58,6 +58,19 @@ function keysdown(e) {
         if (keys[191]) {
             topicROSGameState(0);
         }
+        // N
+        if (keys[78]) {
+            let chase = document.getElementById("ChaseButton").checked;
+            if(chase){
+                $('#ChaseButton').prop('checked',false);
+                $('#ChaseButton').change();
+                chase_switch();
+            }else{
+                $('#ChaseButton').prop('checked',true);
+                $('#ChaseButton').change();
+                chase_switch();
+            }
+        }
         //RobotControl
         if (keys[87] && keys[68]) {
             vec3 = new ROSLIB.Message({

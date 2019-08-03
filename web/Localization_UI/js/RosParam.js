@@ -100,6 +100,14 @@ HoldConditionBox.get(function(value) {
             obj[i].value = value[i];
         }
     }
+    let chase = obj[4].value;
+    if(chase){
+        $('#ChaseButton').prop('checked',true);
+        $('#ChaseButton').change();
+    }else{
+        $('#ChaseButton').prop('checked',false);
+        $('#ChaseButton').change();
+    }
 });
 param_afast.get(function(value) {
     

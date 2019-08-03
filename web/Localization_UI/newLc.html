@@ -191,6 +191,10 @@
                     <label id="ball_ang">999&nbsp;°</label>
                     <label>&nbsp;&nbsp;</label>
                     <label id="ball_dis">999&nbsp;cm</label>
+                    <div style="width:140px;">
+                        <input autocomplete="off" id="ChaseButton" type="checkbox" onclick="chase_switch()">
+                        <label id="ChaseLable" for="ChaseButton">Chase</label>
+                    </div>
                 </div>
                 <div id="MapArea">
                     <img id="canvasMap" ></img>
@@ -647,12 +651,6 @@
     </div>
 <script>
     $(document).ready(function () {//单选  
-        // $("input[name='visionelement']:checkbox").click(function(){  
-        //     if($(this).is(':checked')){  
-        //         console.log($(this).attr('id'))  
-        //         $("#MCLmap").toggleClass("ui-state-active");
-        //     } 
-        // });  
         $('#LocalizationButton,#WhitelineButton').change(function(){
             //console.log($(this).prop('checked'))
             if(!$(this).prop('checked'))
@@ -706,6 +704,7 @@
     $("#LocalizationDiv").buttonset();
     $("#FunctionButttonDiv").buttonset();
     $("#RobotStateDiv").buttonset();
+    $("#MCLInformation").buttonset();
 
     $("#SPlanningVelocityModule").show();
     $("#BallElementModule").hide();
