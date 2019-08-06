@@ -118,7 +118,7 @@ void Vision::source2threshold(){
 void Vision::ObjectProcessing()
 {
     //平行處理
-    #pragma omp parallel sections
+    /*#pragma omp parallel sections
     {
         #pragma omp section
         {
@@ -132,9 +132,12 @@ void Vision::ObjectProcessing()
         {
            Yellow_Item.Reset();
         }
-    }
+    }*/
+    Red_Item.Reset();
+    Blue_Item.Reset();
+    Yellow_Item.Reset();
     draw_center();
-    #pragma omp parallel sections
+    #pragma omp parallel sections num_threads(3)
     {
         #pragma omp section
         {
