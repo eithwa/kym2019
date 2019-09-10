@@ -300,7 +300,7 @@ void Strategy::Forward(RobotData &Robot, double &v_x, double &v_y, double &v_yaw
         double x0=0;
         double y0=0;
         double d_PL=fabs(a*x0+b*y0+c)/sqrt(a*a+b*b);
-        if(d_PL<0.4){
+        if(d_PL<0.3){
             std::cout<<"cross center"<<std::endl;
             //std::cout<<a<<" "<<b<<" "<<c<<" "<<d_PL<<std::endl;
             _LocationState = turn;

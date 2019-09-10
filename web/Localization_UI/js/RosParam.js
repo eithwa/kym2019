@@ -100,11 +100,14 @@ HoldConditionBox.get(function(value) {
             obj[i].value = value[i];
         }
     }
-    let chase = obj[4].value;
+    let chase = parseInt(obj[4].value);
+    console.log(obj[4].value);
     if(chase){
+        document.getElementsByName("ChaseButton").checked =true;
         $('#ChaseButton').prop('checked',true);
         $('#ChaseButton').change();
     }else{
+        document.getElementsByName("ChaseButton").checked =false;
         $('#ChaseButton').prop('checked',false);
         $('#ChaseButton').change();
     }
@@ -128,3 +131,4 @@ param_wcmps.get(function(value) {
         obj[2].value = value;   
     }
 });
+

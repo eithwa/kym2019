@@ -14,5 +14,5 @@
  <node name="localization_white_line" pkg="vision" type="localization_white_line" respawn="true" respawn_delay="5"/>
  <node name="self_localization" pkg="self_localization" type="self_localization" respawn="true" respawn_delay="5"/>
  <node name="imu" pkg="imu_3d" type="imu_3d" respawn="true" respawn_delay="5"/>
- <!--node name="monitor" pkg="vision" type="monitor" respawn="true" respawn_delay="5" /-->
+ <node name="monitor" pkg="vision" type="monitor" respawn="true" respawn_delay="5" />
 </launch>

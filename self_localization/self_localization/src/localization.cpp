@@ -244,7 +244,6 @@ void Localization::velCallback(const geometry_msgs::Twist msg)
             //frame_rate = (1000000000.0 / dt) * ALPHA + frame_rate * (1.0 - ALPHA);
             //cout << "FPS: " << frame_rate << endl;
         }
-
         frame_counter = 0;
     }
 }
