@@ -588,7 +588,7 @@ void Vision::find_shoot_point(DetectedObject &obj_, int color)
         angle_min = angle_min+360;
         angle_max = angle_max+360;
     }
-    for (int distance = InnerMsg; distance <= obj_.dis_max*0.8; distance += Magn_Near_GapMsg)
+    for (int distance = InnerMsg; distance <= obj_.dis_max; distance += Magn_Near_GapMsg)
     {
         for (int angle = angle_min; angle < angle_max; angle += Angle_Interval(distance))
         {
@@ -659,6 +659,7 @@ void Vision::find_shoot_point(DetectedObject &obj_, int color)
         obj_item.ang_min=obj_item.ang_min-360;
         obj_item.ang_max=obj_item.ang_max-360;
     }
+    draw_ellipse(Monitor, obj_item, color);
     //if (color == BLUEITEM){
     //    cv::imshow("threshold", threshold);
     //    waitKey(10);
@@ -930,6 +931,31 @@ void Vision::draw_center()
     x = CenterXMsg + InnerMsg * cos(FrontMsg * PI / 180);
     y = CenterYMsg - InnerMsg * sin(FrontMsg * PI / 180);
     line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 0, 255), 1);
+
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[0] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[0] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+    
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[1] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[1] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+    
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[2] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[2] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+    
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[3] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[3] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+    
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[4] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[4] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+    
+    x = CenterXMsg + OuterMsg * cos(Unscaned_Angle[5] * PI / 180);
+    y = CenterYMsg - OuterMsg * sin(Unscaned_Angle[5] * PI / 180);
+    line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
+
 }
 void Vision::draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, int obj_angle)
 {

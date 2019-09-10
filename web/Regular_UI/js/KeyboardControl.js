@@ -150,11 +150,22 @@ function keysdown(e) {
             }
         }
         //SwitchRobot
+        // P stop
         if (keys[80]) {
             PublishTopicGameState(0);
             StrategyStop();
-        } else if (keys[79]) {
+            $('#StartInput').prop('checked',false);
+            $('#StartInput').change();
+            $('#StopInput').prop('checked',true);
+            $('#StopInput').change();
+        }
+        // O start 
+        else if (keys[79]) {
             PublishTopicGameState(1);
+            $('#StartInput').prop('checked',true);
+            $('#StartInput').change();
+            $('#StopInput').prop('checked',false);
+            $('#StopInput').change();
         }
 
     }

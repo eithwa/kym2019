@@ -14,51 +14,25 @@ function keysdown(e) {
         var speed = document.getElementById("SpeedInput").value;
         keys[e.keyCode] = true;
 
-        // m imu reset
-        if (keys[77]) {
+        // U imu reset
+        if (keys[85]) {
             ImuReset();
         }
        
-        // , hold ball
-        if (keys[188]) {
+        // I hold ball
+        if (keys[79]) {
             //console.log(e.keyCode);
-            let hold_ball_checked = document.getElementById("HoldBallButton1").checked;
-            //console.log(hold_ball_checked);
-
-           if (hold_ball_checked) {
-                $("#HoldBallButton1").remove();
-                var holdball_i = $(document.createElement('i'))
-                    .attr("class", "fa fa-futbol-o fa-2x")
-                    .attr("aria-hidden", "true")
-                    .attr("id", "HoldBallButton1")
-                holdball_i.appendTo("#HoldBallDiv1");
-                this.value = 0;
-                HoldBallSwitch(0,1);
-                $('#HoldBallButton1').prop('checked',false);
-                $('#HoldBallButton1').change();
-            } else {
-                $("#HoldBallButton1").remove();
-                var holdball_i = $(document.createElement('i'))
-                    .attr("class", "fa fa-futbol-o fa-2x fa-spin")
-                    .attr("aria-hidden", "true")
-                    .attr("id", "HoldBallButton1")
-                    .attr("style","color: #FFCC00;")
-                holdball_i.appendTo("#HoldBallDiv1");
-                this.value = 1;
-                HoldBallSwitch(1,1);
-                $('#HoldBallButton1').prop('checked',true);
-                $('#HoldBallButton1').change();
-            }
+            holdball();
         }
-        // . start
-        if (keys[190]) {
+        // O start
+        if (keys[79]) {
             topicROSGameState(9);
         }
-        // / stop
-        if (keys[191]) {
+        // P stop
+        if (keys[80]) {
             topicROSGameState(0);
         }
-        // N
+        // N chase switch
         if (keys[78]) {
             let chase = document.getElementById("ChaseButton").checked;
             if(chase){
@@ -226,3 +200,4 @@ function keyuped(e) {
         keys[e.keyCode] = false;
     }
 }
+
