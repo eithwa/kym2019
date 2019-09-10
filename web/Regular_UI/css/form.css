@@ -519,8 +519,8 @@ table.RobotInformationTable tfoot td {
 }
 
 /*==========================================================*/
-#locTable {
-    width: 450px;
+#localTable {
+    width: 380px;
     height: 80px;
     z-index: 2;
     /*border: 1px solid black;*/
@@ -546,3 +546,4 @@ table.RobotInformationTable tfoot td {
     font-size: 13px;
     color: #fff;
 }
+

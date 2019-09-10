@@ -174,7 +174,7 @@
                             <canvas id="attack_map" class="DrawRect" width="659" height="493" ></canvas>
                             <canvas id="robot_map" class="DrawRect" width="659" height="493" ></canvas>
                             <canvas id="reset_map" class="DrawRect" width="659" height="493" ></canvas>
-                            <div id = "locTable"> 
+                            <div id = "localTable"> 
                                 <table class = "locInformationTable" >
                                     <tr>
                                         <td>
@@ -285,10 +285,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="SpeedSlider" name="SpeedElement" type="range" min="0" max="100" value="0" oninput="ToInputValue(this.value,this.name,1);">
+                                        <input id="SpeedSlider" name="SpeedElement" type="range" min="0" max="100" value="20" oninput="ToInputValue(this.value,this.name,1);">
                                     </td>
                                     <td>
-                                        <input id="SpeedInput" name="SpeedElement" placeholder="Speed" value="0" type="number" min="0" max="100" oninput="ToSliderValue(this.value,this.name,0);" />
+                                        <input id="SpeedInput" name="SpeedElement" placeholder="Speed" value="20" type="number" min="0" max="100" oninput="ToSliderValue(this.value,this.name,0);" />
                                     </td>
                                 </tr>
                             </table>
@@ -297,7 +297,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="ShootInput" name="ShootElement" placeholder="Shoot" value="0" type="number" min="0" max="100" oninput="JudgeShootInput(this.name,this.value);" />
+                                        <input id="ShootInput" name="ShootElement" placeholder="Shoot" value="80" type="number" min="0" max="100" oninput="JudgeShootInput(this.name,this.value);" />
                                     </td>
                                     <td>
                                         <input id="ShootButton" type="button" value="Shoot" onclick="PublishTopicShoot(parseInt(document.getElementById('ShootInput').value))">
@@ -472,7 +472,7 @@
             <div class="modal-content GeneralContent">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">SetGeneralForm</h4>
+                    <h4 class="modal-title">General</h4>
                     <div id="GeneralSettingRobotDiv">
                         <table>
                             <tr>
@@ -1024,8 +1024,8 @@
                                         <label id="TypeSAttack1" for="TypeSAttack1">Type-S Attack</label>
                                     </td>
                                     <td>
-                                        <input type="radio" id="TypeUAttack1" name="PathplanStrategy1" />
-                                        <label id="TypeUAttack1" for="TypeUAttack1">Type-U Attack</label>
+                                        <input type="radio" id="PGoalkeeper1" name="PathplanStrategy1" />
+                                        <label id="PGoalkeeper1" for="PGoalkeeper1">Goalkeeper</label>
                                     </td>
                                     <td>
                                         <input type="radio" id="SideSpeedUp1" name="PathplanStrategy1" />
@@ -1121,58 +1121,34 @@
                             </table>
                         </div>
                         <!-- Type-U Attack Module -->
-                        <div class="form-group" id="TypeUAttackModule1">
+                        <div class="form-group" id="PGoalkeeperModule1">
                             <table>
                                 <tr>
                                     <th>ConfigName</th>
                                     <th>Value</th>
                                 </tr>
                                 <tr>
-                                    <td>(double)cycle</td>
+                                    <td>(double)block_max_speed </td>
                                     <td>
-                                        <input type="text" name="TypeUAttackElement1" value="0.8" />
+                                        <input type="text" name="PGoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>(double)circle_y_speed</td>
+                                    <td>(double)block_pullback_ball2opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="TypeUAttackElement1" value="1.0" />
+                                        <input type="text" name="PGoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>(double)circle_size_right</td>
+                                    <td>(double)block_pullback_opgoal_dis</td>
                                     <td>
-                                        <input type="text" name="TypeUAttackElement1" value="-90.0" />
+                                        <input type="text" name="PGoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>(double)circle_size_left</td>
+                                    <td>(double)block_angle_range</td>
                                     <td>
-                                        <input type="text" name="TypeUAttackElement1" value="90.0" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>(double)distance_br_min</td>
-                                    <td>
-                                        <input type="text" name="TypeUAttackElement1" value="0.6" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>(double)distance_dr_min</td>
-                                    <td>
-                                        <input type="text" name="TypeUAttackElement1" value="0.3" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>(double)angle_br_min</td>
-                                    <td>
-                                        <input type="text" name="TypeUAttackElement1" value="10.0" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>(double)angle_dr_min</td>
-                                    <td>
-                                        <input type="text" name="TypeUAttackElement1" value="20.0" />
+                                        <input type="text" name="PGoalkeeperElement1" value="0" />
                                     </td>
                                 </tr>
                             </table>
@@ -2013,7 +1989,7 @@
             <div class="modal-content BehaviorContent">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">FIRA Behavior</h4>
+                    <h4 class="modal-title">Behavior</h4>
                     <div id="BehaviorSettingRobotDiv">
                         <table>
                             <tr>
@@ -3515,7 +3491,7 @@
 
         $("#SPlanningVelocity1").click(function() {
             $("#SPlanningVelocityModule1").show();
-            $("#PathPlanModule1PathPlanModule1").hide();
+            $("#PathPlanModule1").hide();
         });
         $("#PathPlan1").click(function() {
             $("#PathPlanModule1").show();
@@ -3578,7 +3554,7 @@
         $("#ChaseStrategyModule1").hide();
         $("#ZoneAttackModule1").hide();
         $("#TypeSAttackModule1").hide();
-        $("#TypeUAttackModule1").hide();
+        $("#PGoalkeeperModule1").hide();
         $("#SideSpeedUpModule1").hide();
         $("#DorsadAttackModule1").hide();
         $("#CornerKickModule1").hide();
@@ -3589,7 +3565,7 @@
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
@@ -3600,7 +3576,7 @@
             $("#AttackStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
@@ -3611,7 +3587,7 @@
             $("#AttackStrategyModule1").hide();
             $("#ChaseStrategyModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
@@ -3622,14 +3598,14 @@
             $("#AttackStrategyModule1").hide();
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
             $("#PenaltyKickModule1").hide();
         });
-        $("#TypeUAttack1").click(function() {
-            $("#TypeUAttackModule1").show();
+        $("#PGoalkeeper1").click(function() {
+            $("#PGoalkeeperModule1").show();
             $("#AttackStrategyModule1").hide();
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
@@ -3645,7 +3621,7 @@
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
             $("#PenaltyKickModule1").hide();
@@ -3656,7 +3632,7 @@
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#CornerKickModule1").hide();
             $("#PenaltyKickModule1").hide();
@@ -3667,7 +3643,7 @@
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#PenaltyKickModule1").hide();
@@ -3678,7 +3654,7 @@
             $("#ChaseStrategyModule1").hide();
             $("#ZoneAttackModule1").hide();
             $("#TypeSAttackModule1").hide();
-            $("#TypeUAttackModule1").hide();
+            $("#PGoalkeeperModule1").hide();
             $("#SideSpeedUpModule1").hide();
             $("#DorsadAttackModule1").hide();
             $("#CornerKickModule1").hide();
@@ -4579,4 +4555,5 @@
 </body>
 
 </html>
+
 

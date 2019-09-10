@@ -682,6 +682,7 @@ function PublishTopicShoot(size) {
         data: size
     });
     if (RemoteState) {
+        console.log("shoot "+size);
         if (ChooseRobot == 1) {
             TopicShoot1.publish(Shoot);
         } else if (ChooseRobot == 2) {
@@ -1007,4 +1008,5 @@ function HoldBallSwitch(state,robot) {
     if (CheckIP[2] == 1 && robot == 3)
         HoldBall3.publish(check);
 }
+
 

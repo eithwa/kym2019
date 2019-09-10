@@ -5,7 +5,7 @@ int main(int argc,char **argv){
     ros::NodeHandle nh;
 
     Localization localization;
-    ros::Rate loop_rate(60);
+    ros::Rate loop_rate(30);
     while(ros::ok()){
         localization.draw_particles();
         ros::spinOnce();

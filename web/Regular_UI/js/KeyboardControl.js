@@ -134,6 +134,21 @@ function keysdown(e) {
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
         }
+        //shoot key space
+        if(keys[74]){
+            PublishTopicShoot(parseInt(document.getElementById('ShootInput').value));
+        }
+        if(keys[73]){
+            if (RemoteState) {
+                if (ChooseRobot == 1) {
+                    holdball(1);
+                } else if (ChooseRobot == 2) {
+                    holdball(2);
+                } else if (ChooseRobot == 3) {
+                    holdball(3);
+                }
+            }
+        }
         //SwitchRobot
         if (keys[80]) {
             PublishTopicGameState(0);
@@ -185,7 +200,7 @@ function releasebutton(state) {
 
 function keyuped(e) {
     if (start) {
-      console.log("start moving");
+        //console.log("start moving");
         if (keys[e.keyCode] == true) releasebutton(e.keyCode);
         //else if (keys[69] == true) releasebutton(69);
         //else if (keys[87] == true) releasebutton(87);
@@ -195,3 +210,4 @@ function keyuped(e) {
         keys[e.keyCode] = false;
     }
 }
+

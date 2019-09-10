@@ -6,7 +6,7 @@ function MonitorSwitch(checked) {
     //let check = document.getElementById("CameraSwitch").checked;
 
     if (checked == true) {
-        document.getElementById('locTable').style.zIndex = "-1";
+        document.getElementById('localTable').style.zIndex = "-1";
         let canvas = document.getElementById('reset_map');
         let ctx=canvas.getContext("2d");
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -51,7 +51,7 @@ function MonitorSwitch(checked) {
             // console.log(00);
         }
     } else {
-        document.getElementById('locTable').style.zIndex = "10";
+        document.getElementById('localTable').style.zIndex = "2";
         attack_way();
         
         //======================================
@@ -98,7 +98,7 @@ function Mclmap(checked) {
     ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    document.getElementById('locTable').style.zIndex = "10";
+    document.getElementById('localTable').style.zIndex = "2";
     if(reset_bool == true){
         let canvas = document.getElementById('reset_map');
         let ctx=canvas.getContext("2d");
@@ -355,8 +355,9 @@ ResetMap.addEventListener("mousedown", function(e) {
                   let ctx=canvas.getContext("2d");
                   ctx.clearRect(0,0,canvas.width,canvas.height);
                   ctx.beginPath();
+                  let move_y = event.offsetY;
                   let move_x = event.offsetX;
-                  mouse_angle = angle_offset+(mouse_x-move_x)/180*pi;
+                  mouse_angle = angle_offset+((mouse_y-move_y)*3+(mouse_x-move_x)*3)/180*pi;
                   line_x = mouse_x+20 * Math.cos(mouse_angle);
                   line_y = mouse_y+20 * Math.sin(mouse_angle);
                   ctx.arc(mouse_x, mouse_y, 15, 0, 2*Math.PI);
@@ -414,4 +415,5 @@ ResetMap.addEventListener("mouseleave", function(e) {
     mouse_clicked = false;
     //console.log("mouseleave");
 });    
+
 
