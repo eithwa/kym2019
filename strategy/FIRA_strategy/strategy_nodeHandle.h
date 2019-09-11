@@ -52,7 +52,7 @@
 #define SAVEPARAM_TOPIC "/FIRA/SaveParam"
 #define IsTeamStrategy_Topic "/FIRA/IsTeamStrategy"
 //BlackObject_distance
-#define  BlackObject_Topic "/vision/BlackRealDis"
+#define  BlackObject_Topic "/BlackRealDis"
 //TwoPointDoor
 #define  Two_point_Topic "interface/Two_point"
 //one_Robot speed
@@ -63,7 +63,7 @@
 #define RobotSpeed_Topic_Suffix "/Strategy/PathPlan/RobotSpeed"
 
 //BlackObject_distance
-#define  BlackObject_Topic "/vision/BlackRealDis"
+#define  BlackObject_Topic "/BlackRealDis"
 #define  WhiteObject_Topic "/vision/WhiteRealDis"
 
 #define Node_Name "PersonalStrategy"

@@ -590,7 +590,7 @@ void Vision::find_shoot_point(DetectedObject &obj_, int color)
     }
     for (int distance = InnerMsg; distance <= obj_.dis_max; distance += Magn_Near_GapMsg)
     {
-        for (int angle = angle_min; angle < angle_max; angle += Angle_Interval(distance))
+        for (int angle = angle_min-5; angle < angle_max+5; angle += Angle_Interval(distance))
         {
             int find_angle = Angle_Adjustment(angle);
             if ((find_angle >= Unscaned_Angle[0] && angle <= Unscaned_Angle[1]) ||
