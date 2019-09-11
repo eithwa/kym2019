@@ -1548,7 +1548,7 @@ void FIRA_pathplan_class::strategy_PenaltyKick(int Robot_index){
             if(yaw_speed < -180){
                 yaw_speed = yaw_speed + 360;
             }
-            env.home[Robot_index].v_yaw = yaw_speed*2;
+            env.home[Robot_index].v_yaw = yaw_speed;
             printf("action=%d\n",action);
             printf("right_goal_angle=%f\n",right_goal_angle);
             printf("left_goal_angle=%f\n",left_goal_angle);
@@ -1570,7 +1570,7 @@ void FIRA_pathplan_class::strategy_PenaltyKick(int Robot_index){
             if(des_angle < 15){
                 env.home[Robot_index].v_yaw = (yaw_speed)/5;
             }else{
-                env.home[Robot_index].v_yaw = yaw_speed;
+                env.home[Robot_index].v_yaw = double(yaw_speed/2.5);
             }
             printf("action=%d\n",action);
             printf("right_goal_angle=%f\n",right_goal_angle);
@@ -1594,7 +1594,7 @@ void FIRA_pathplan_class::strategy_PenaltyKick(int Robot_index){
             if(des_angle > -15){
                 env.home[Robot_index].v_yaw = (-yaw_speed)/5;
             }else{
-                env.home[Robot_index].v_yaw = -yaw_speed;
+                env.home[Robot_index].v_yaw = -double(yaw_speed/2.5);
             }
             printf("action=%d\n",action);
             printf("right_goal_angle=%f\n",right_goal_angle);
