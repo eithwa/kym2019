@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <launch> 
  <rosparam command="load" file="$(find fira_launch)/default_config/vision_better.yaml"/>
- <param name="FIRA/RobotNumber" value="1"/>
+ <param name="FIRA/RobotNumber" value="2"/>
  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
  <node name="mjpeg_server" pkg="mjpeg_server" type="mjpeg_server"/>
  <!--node name="FIRA_strategy" pkg="strategy" type="FIRA_strategy"/-->

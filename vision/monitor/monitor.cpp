@@ -406,6 +406,22 @@ void Vision::find_object_point(DetectedObject &obj_, int color)
     else if (color == BLUEITEM || color == YELLOWITEM)
     {
         angle_ = Angle_Adjustment((obj_.ang_max + obj_.ang_min) / 2);
+        distance_ = obj_.dis_min;
+
+        find_angle = Angle_Adjustment(angle_);
+
+        x_ = distance_ * Angle_cos[find_angle];
+        y_ = distance_ * Angle_sin[find_angle];
+
+        x = Frame_Area(CenterXMsg + x_, Source.cols);
+        y = Frame_Area(CenterYMsg - y_, Source.rows);    
+
+        obj_.x = x;
+        obj_.y = y;
+        obj_.distance = distance_;
+        obj_.angle = find_angle;
+        /*
+        angle_ = Angle_Adjustment((obj_.ang_max + obj_.ang_min) / 2);
         angle_range = 0.7 * Angle_Adjustment((obj_.ang_max - obj_.ang_min) / 2);
 
         for (int distance = obj_.dis_min; distance <= obj_.dis_max; distance++)
@@ -459,6 +475,7 @@ void Vision::find_object_point(DetectedObject &obj_, int color)
                 break;
             }
         }
+        */
     }
 
     if (Angle_Adjustment(angle_ - FrontMsg) < 180)

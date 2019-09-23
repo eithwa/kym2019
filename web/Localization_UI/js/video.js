@@ -177,8 +177,9 @@ ResetMap.addEventListener("mousedown", function(e) {
                 let ctx=canvas.getContext("2d");
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 ctx.beginPath();
+                let move_y = event.offsetY;
                 let move_x = event.offsetX;
-                mouse_angle = angle_offset+(mouse_x-move_x)/180*pi;
+                mouse_angle = angle_offset+((mouse_y-move_y)*3+(mouse_x-move_x)*3)/180*pi;
                 line_x = mouse_x+40 * Math.cos(mouse_angle);
                 line_y = mouse_y+40 * Math.sin(mouse_angle);
                 ctx.arc(mouse_x, mouse_y, 30, 0, 2*Math.PI);

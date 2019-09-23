@@ -8,7 +8,7 @@ function holdball(robotnumber){
         robotdiv = "HoldBallDiv1";
     }
     if (robotnumber == 2){
-        robotbutton = "#HoldBallButton2";
+        robotbutton = "HoldBallButton2";
         robotdiv = "HoldBallDiv2";
     }
     if (robotnumber == 3){

@@ -134,10 +134,11 @@ function keysdown(e) {
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
         }
-        //shoot key space
+        //J shoot
         if(keys[74]){
             PublishTopicShoot(parseInt(document.getElementById('ShootInput').value));
         }
+        //I holdball
         if(keys[73]){
             if (RemoteState) {
                 if (ChooseRobot == 1) {
