@@ -52,6 +52,7 @@ void NodeHandle::Saveyaml()
     std::string temp = "rosparam dump " + param + " FIRA/vision";
     const char *save = temp.c_str();
     system(save);
+
     cout << "Save the yaml file" << endl;
     Parameter_getting();
 }
@@ -60,6 +61,7 @@ void NodeHandle::Parameter_getting()
     cout << "get parameter" << endl;
     //===================FPS參數==========================
     nh.getParam("FIRA/vision/FPS", fpsMsg);
+    set_campara(fpsMsg);
     //===================中心參數=========================
     nh.getParam("FIRA/vision/Center/Center_X", CenterXMsg);
     nh.getParam("FIRA/vision/Center/Center_Y", CenterYMsg);

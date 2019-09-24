@@ -77,7 +77,6 @@ class NodeHandle
     int SizeFilter;
     //======================================
     void Set_Unscaned_Angle();
-    void HSVmap();
     vector<BYTE> ColorFile();
     vector<BYTE> color_map;
     int b_end_gap;

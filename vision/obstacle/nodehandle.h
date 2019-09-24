@@ -10,23 +10,26 @@
 #include <dynamic_reconfigure/Config.h>
 #include <highgui.h>
 #include <vector>
+#include <deque>
 #include <math.h>
 #include <signal.h>
-#include <fstream>
 #include <std_msgs/Int32.h>
 #include <std_msgs/Int32MultiArray.h>
+#include <fstream>
 #include "vision/center.h"
+#include "vision/black.h"
 #include "vision/bin.h"
 #define PI 3.14159265
-#define FRAME_COLS 659 //width  x695
+#define FRAME_COLS 659 //width  x659
 #define FRAME_ROWS 493 //height y493
-
-#define YAML_PATH ros::package::getPath("vision")+"/config/FIRA.yaml"
-#define BIN_PATH ros::package::getPath("vision") + "/config/HSVcolormap.bin"
+#define VISION_TOPIC "camera/image_raw"
+#define YAML_PATH ros::package::getPath("vision") + "/config/FIRA.yaml"
+#define IMAGE "/src/vision/1.bmp"
 
 typedef unsigned char BYTE;
 using namespace cv;
 using namespace std;
+
 struct DetectedObject
 {
     DetectedObject();
@@ -40,31 +43,29 @@ struct DetectedObject
     int angle;       //pix
     double distance; //pix
     int size;
-    string LR;
 };
+
 class NodeHandle
 {
-public:
-	NodeHandle();
+  protected:
 	void Readyaml();
-	void get_param();
-//==========================================
+	NodeHandle();
+	void Parameter_getting();
+	//========================================
 	void AngleLUT();
 	vector<double> Angle_sin;
 	vector<double> Angle_cos;
-//================center====================
+	int Frame_Area(int coordinate, int range);
+	int Angle_Adjustment(int angle);
+    int Angle_Interval(int radius);
+	//================center==================
 	int CenterXMsg;
 	int CenterYMsg;
 	int InnerMsg;
 	int OuterMsg;
 	int FrontMsg;
-    int FieldMsg;
 	double Camera_HighMsg;
-//================scan=====================
-    int Strategy_Angle(int angle);
-	int Frame_Area(int coordinate, int range);
-	int Angle_Adjustment(int angle);
-    int Angle_Interval(int radius);
+    //================scan====================
     int Angle_Near_GapMsg;
     int Magn_Near_GapMsg;
     int Magn_Near_StartMsg;
@@ -77,19 +78,20 @@ public:
     int Angle_range_1Msg;
     int Angle_range_2_3Msg;
     int Unscaned_Angle[8];
-//================color===================
-    vector<BYTE> ColorFile();
-    vector<BYTE> color_map;
-	vector<int> HSV_red;
-	vector<int> HSV_green;
-//==============distance==================
+    void Set_Unscaned_Angle();
+	//================black===================
+	int BlackGrayMsg;
+	int BlackAngleMsg;
+	std_msgs::Int32MultiArray blackdis;
+	//==============distance==================
 	double camera_f(double Omni_pixel);
 	double Omni_distance(double pixel_dis);
-private:
+
+  private:
 	ros::NodeHandle nh;
 	ros::Subscriber save_sub;
 	void SaveButton_setting(const vision::bin msg);
-    void Set_Unscaned_Angle();
 	int SaveButton;
+	//==============black====================
+	void blackcall(const vision::black msg);
 };
-

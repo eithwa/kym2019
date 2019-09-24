@@ -1,19 +1,18 @@
-#include "monitor.h"
+#include "obstacle.h"
 
 void SigintHandler(int sig)
 {
-	ROS_INFO("shutting down!");
-	ros::shutdown();
+    ROS_INFO("shutting down!");
+    ros::shutdown();
 }
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "monitor", ros::init_options::NoSigintHandler);
+    ros::init(argc, argv, "obstacle");
     ros::NodeHandle h_node;
     signal(SIGINT, SigintHandler);
-    //Vision cam(VISION_TOPIC);
     Vision cam("camera/image_raw");
-    ros::Rate loop_rate(100);
+    ros::Rate loop_rate(200);
     while(ros::ok()){
         ros::spinOnce();
         loop_rate.sleep();
@@ -22,4 +21,3 @@ int main(int argc, char **argv)
     printf("Process exit\n");
     return 0;
 }
-

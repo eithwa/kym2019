@@ -151,7 +151,7 @@ foreach(
     white_line
     black_item
     localization_white_line
-    tracking
+    obstacle
 )
 add_subdirectory(${subdir})
 endforeach()

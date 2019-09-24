@@ -117,22 +117,6 @@ void Vision::source2threshold(){
 //===============================物件分割=======================================
 void Vision::ObjectProcessing()
 {
-    //平行處理
-    /*#pragma omp parallel sections
-    {
-        #pragma omp section
-        {
-            Red_Item.Reset();
-        }
-        #pragma omp section
-        {
-           Blue_Item.Reset();
-        }
-        #pragma omp section
-        {
-           Yellow_Item.Reset();
-        }
-    }*/
     Red_Item.Reset();
     Blue_Item.Reset();
     Yellow_Item.Reset();
@@ -676,7 +660,7 @@ void Vision::find_shoot_point(DetectedObject &obj_, int color)
         obj_item.ang_min=obj_item.ang_min-360;
         obj_item.ang_max=obj_item.ang_max-360;
     }
-    draw_ellipse(Monitor, obj_item, color);
+    draw_ellipse(Monitor, obj_item, 5);
     //if (color == BLUEITEM){
     //    cv::imshow("threshold", threshold);
     //    waitKey(10);
@@ -935,8 +919,15 @@ void Vision::draw_ellipse(Mat &frame_, DetectedObject &obj_, int color)
 {
     ellipse(frame_, Point(CenterXMsg, CenterYMsg), Size(obj_.dis_min, obj_.dis_min), 0, 360 - obj_.ang_max, 360 - obj_.ang_min, Scalar(255, 255, 0), 1);
     ellipse(frame_, Point(CenterXMsg, CenterYMsg), Size(obj_.dis_max, obj_.dis_max), 0, 360 - obj_.ang_max, 360 - obj_.ang_min, Scalar(255, 255, 0), 1);
-    draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_max);
-    draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_min);
+    draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_max, color);
+    draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_min, color);
+    //goalkeeper
+    if(color==5){
+        ellipse(frame_, Point(CenterXMsg, CenterYMsg), Size(obj_.dis_min, obj_.dis_min), 0, 360 - obj_.ang_max, 360 - obj_.ang_min, Scalar(0, 255, 255), 1);
+        ellipse(frame_, Point(CenterXMsg, CenterYMsg), Size(obj_.dis_max, obj_.dis_max), 0, 360 - obj_.ang_max, 360 - obj_.ang_min, Scalar(0, 255, 255), 1);
+        draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_max, 5);
+        draw_Line(frame_, obj_.dis_max, obj_.dis_min, obj_.ang_min, 5);
+    }
     circle(frame_, Point(obj_.x, obj_.y), 2, Scalar(0, 0, 0), -1);
 }
 void Vision::draw_center()
@@ -974,7 +965,7 @@ void Vision::draw_center()
     line(Monitor, Point(CenterXMsg, CenterYMsg), Point(x, y), Scalar(255, 255, 255), 1);
 
 }
-void Vision::draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, int obj_angle)
+void Vision::draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, int obj_angle, int color)
 {
     int x_, y_;
     double angle_f;
@@ -995,6 +986,9 @@ void Vision::draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, 
     y[1] = Frame_Area(CenterYMsg - y_, frame_.rows);
 
     line(frame_, Point(x[0], y[0]), Point(x[1], y[1]), Scalar(255, 255, 0), 1);
+    if(color==5){
+        line(frame_, Point(x[0], y[0]), Point(x[1], y[1]), Scalar(0, 255, 255), 1);
+    }
 }
 void Vision::draw_point(cv::Mat &frame_, DetectedObject &obj_, string color, Scalar Textcolor)
 {
@@ -1011,11 +1005,11 @@ void Vision::draw_point(cv::Mat &frame_, DetectedObject &obj_, string color, Sca
     Y = Y_out.str();
     cv::putText(frame_, color + "(" + X + "," + Y + ")", Point(obj_.x, obj_.y), 0, 0.5, Textcolor, 1);
 
-    //==========球門射擊點繪製==============
+    //==========球門射擊點 左右邊界繪製==============
     if (color == "B" || color == "Y")
     {
         circle(frame_, Point(obj_.right_x, obj_.right_y), 2, Scalar(0, 0, 0), -1);
         circle(frame_, Point(obj_.left_x, obj_.left_y), 2, Scalar(0, 0, 0), -1);
-        circle(frame_, Point(obj_.fix_x, obj_.fix_y), 5, Scalar(0, 255, 0), -1);
+        circle(frame_, Point(obj_.fix_x, obj_.fix_y), 4, Scalar(0, 255, 0), -1);
     }
 }

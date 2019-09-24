@@ -36,6 +36,7 @@
 #define WHITEITEM 0x10//WHITEITEM=robot
 #define VISION_TOPIC "camera/image_raw"
 #define YAML_PATH ros::package::getPath("vision")+"/config/FIRA.yaml"
+#define PROCILICA_PATH ros::package::getPath("vision")+"/config/prosilica_driver.yaml"
 #define BIN_PATH ros::package::getPath("vision")+"/config/HSVcolormap.bin"
 #define test "src/vision/1.bmp"
 
