@@ -107,7 +107,7 @@ cv::Mat Vision::Black_Item(const cv::Mat iframe)
     int x_, y_;
     int object_size;
     int dis, ang;
-    for (int distance = Magn_Near_StartMsg; distance <= Magn_Far_EndMsg; distance += Magn_Near_GapMsg)
+    for (int distance = InnerMsg; distance <= Magn_Far_StartMsg; distance += Magn_Near_GapMsg)
     {
         for (int angle = 0; angle < 360; angle += Angle_Interval(distance))
         {
@@ -147,7 +147,7 @@ cv::Mat Vision::Black_Item(const cv::Mat iframe)
 
                     ang = find_point.front();
                     find_point.pop_front();
-
+                    
                     object_compare(FIND_Item, dis, ang);
                     find_around_black(frame_, find_point, dis, ang, object_size, color);
 
@@ -157,7 +157,8 @@ cv::Mat Vision::Black_Item(const cv::Mat iframe)
 
             find_point.clear();
 
-            if (!(FIND_Item.size < 100 && FIND_Item.distance < 50))
+            if(FIND_Item.size>20)
+            //if (!(FIND_Item.size < 100 && FIND_Item.distance < 50))
             {
                 obj_item.push_back(FIND_Item);
             }
@@ -234,26 +235,32 @@ void Vision::find_around_black(Mat &frame_, deque<int> &find_point, int distance
     {
         for (int j = -1; j < 2; j++)
         {
-            dis_f = distance + i;
-            Magn_Near_GapMsg;
-
+            dis_f = distance + i * Magn_Near_GapMsg;
             if (dis_f < Magn_Near_StartMsg)
                 dis_f = Magn_Near_StartMsg;
 
-            dis_f = Frame_Area(dis_f, Magn_Far_EndMsg);
+            //dis_f = Frame_Area(dis_f, Magn_Far_EndMsg);
+            if(dis_f>Magn_Far_StartMsg)break;
+            
             ang_f = angle + j * Angle_Interval(dis_f);
-
+            ang_f = ang_f - (ang_f % Angle_Interval(dis_f));
+            
             while ((Angle_Adjustment(ang_f) > Unscaned_Angle[0] && Angle_Adjustment(ang_f) < Unscaned_Angle[1]) ||
                    (Angle_Adjustment(ang_f) > Unscaned_Angle[2] && Angle_Adjustment(ang_f) < Unscaned_Angle[3]) ||
                    (Angle_Adjustment(ang_f) > Unscaned_Angle[4] && Angle_Adjustment(ang_f) < Unscaned_Angle[5]) ||
                    (Angle_Adjustment(ang_f) > Unscaned_Angle[6] && Angle_Adjustment(ang_f) < Unscaned_Angle[7]))
             {
-                if (j < 0)
+                if (j < 0){
                     ang_f += -1 * Angle_Interval(dis_f);
-                else
+                    ang_f = ang_f - (ang_f % Angle_Interval(dis_f));
+                }
+                else{
                     ang_f += 1 * Angle_Interval(dis_f);
+                    ang_f = ang_f + (Angle_Interval(dis_f) - (ang_f % Angle_Interval(dis_f)) );
+                }
             }
-
+            
+            
             angle_f = Angle_Adjustment(ang_f);
 
             x_ = dis_f * Angle_cos[angle_f];

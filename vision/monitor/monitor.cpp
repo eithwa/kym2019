@@ -258,8 +258,7 @@ void Vision::find_around(Mat &frame_, deque<int> &find_point, int distance, int 
     {
         for (int j = -1; j < 2; j++)
         {
-            dis_f = distance + i;
-            Magn_Near_GapMsg;
+            dis_f = distance + i*Magn_Near_GapMsg;
 
             if (dis_f < Magn_Near_StartMsg)
                 dis_f = Magn_Near_StartMsg;
@@ -308,8 +307,7 @@ void Vision::find_around_black(Mat &frame_, deque<int> &find_point, int distance
     {
         for (int j = -1; j < 2; j++)
         {
-            dis_f = distance + i;
-            Magn_Near_GapMsg;
+            dis_f = distance + i * Magn_Near_GapMsg;
 
             if (dis_f < Magn_Near_StartMsg)
                 dis_f = Magn_Near_StartMsg;
