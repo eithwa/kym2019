@@ -38,3 +38,5 @@ var reset_w=0;
 var catchball1=0;
 var catchball2=0;
 var catchball3=0;
+
+var move_angle3 = 0;

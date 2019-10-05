@@ -90,9 +90,9 @@ function Mclmap(checked) {
     attack_way();
     var video = document.getElementById("MapCanvas");
     var camera_checked = document.getElementById("CameraSwitch").checked;
-    let canvas = document.getElementById("robot_map");
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //let canvas = document.getElementById("robot_map");
+    //let ctx = canvas.getContext("2d");
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     canvas = document.getElementById("caution_map");
     ctx = canvas.getContext("2d");
@@ -337,6 +337,11 @@ ResetMap.addEventListener("mousedown", function(e) {
           reset_x=x_;
           reset_y=y_;
           reset_w=-mouse_angle/pi*180;
+          if(reset_w<0){
+              reset_w = -reset_w%360*-1;
+          }else{
+              reset_w = reset_w%360;
+          }
           //if(!ground_reverse){
           //    reset_x=x_;
           //    reset_y=y_;
@@ -415,5 +420,4 @@ ResetMap.addEventListener("mouseleave", function(e) {
     mouse_clicked = false;
     //console.log("mouseleave");
 });    
-
 

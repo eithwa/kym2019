@@ -30,10 +30,13 @@ NodeHandle::NodeHandle()
     AngleLUT();
 
     save_sub = nh.subscribe("interface/bin_save", 1000, &NodeHandle::SaveButton_setting, this);
+    obstacle_sub = nh.subscribe("vision/obstacle", 1000, &NodeHandle::obstacle_setting, this);
     //http://localhost:8080/stream?topic=/camera/image_monitor webfor /camera/image
-    obstacle_pub = nh.advertise<std_msgs::Int32MultiArray>("vision/obstacle", 1);
-    obstacleframe_pub = nh.advertise<sensor_msgs::Image>("camera/obstacle", 1);
-    
+    imu_sub = nh.subscribe("imu_3d", 1000, &NodeHandle::imuCallback, this);
+    robot_sub = nh.subscribe("akf_pose", 1000, &NodeHandle::robotCallback, this);
+    robot_x = 0;
+    robot_y = 0;
+    imu_angle = 0;
 }
 void NodeHandle::AngleLUT()
 {
@@ -188,6 +191,7 @@ void NodeHandle::SaveButton_setting(const vision::bin msg)
     Parameter_getting();
 }
 //========================distance========================
+//========================publisher=======================
 double NodeHandle::camera_f(double Omni_pixel)
 {
     double m = (Omni_pixel * 0.0099) / 60; // m = H1/H0 = D1/D0    D0 + D1 = 180
@@ -213,32 +217,24 @@ double NodeHandle::Omni_distance(double pixel_dis)
     //ROS_INFO("%f %f %f %f",Z,c,r,dis);
     return dis;
 }
-int NodeHandle::Strategy_Angle(int angle)
+void NodeHandle::obstacle_setting(const std_msgs::Int32MultiArray msg)
 {
-    if (Angle_Adjustment(angle - FrontMsg) < 180)
-    {
-        angle = Angle_Adjustment(angle - FrontMsg);
+    obstacle_info.clear();
+    for(int i=0; i<msg.data.size(); i++){
+        obstacle_info.push_back(msg.data.at(i));
     }
-    else
-    {
-        angle = Angle_Adjustment(angle - FrontMsg) - 360;
-    }
-    return angle;
 }
-//========================publisher=======================
-void NodeHandle::pub_obstacle(vector<DetectedObject> obstacle)
+void NodeHandle::imuCallback(const imu_3d::inertia msg)
 {
-    std_msgs::Int32MultiArray obstacle_info;
-    for(int i=0; i<obstacle.size(); i++){
-        obstacle_info.data.push_back(Omni_distance(obstacle.at(i).distance));
-        obstacle_info.data.push_back(Strategy_Angle(obstacle.at(i).angle));
-        obstacle_info.data.push_back(Strategy_Angle(obstacle.at(i).ang_max));
-        obstacle_info.data.push_back(Strategy_Angle(obstacle.at(i).ang_min));
-    }
-    obstacle_pub.publish(obstacle_info);
+    imu_angle = msg.yaw*360/(M_PI*2);
+    imu_angle=(360-imu_angle)+90;
+    
+    if(imu_angle<0)imu_angle = 360+imu_angle;
+    if(imu_angle>360)imu_angle = imu_angle-360;
+    //cout<<imu_angle<<endl;
 }
-void NodeHandle::Pub_obstacleframe(Mat frame)
+void NodeHandle::robotCallback(const geometry_msgs::PoseWithCovarianceStamped msg)
 {
-    sensor_msgs::ImagePtr obstacleframeMsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
-    obstacleframe_pub.publish(obstacleframeMsg);
+    robot_x = msg.pose.pose.position.x*100;
+    robot_y = msg.pose.pose.position.y*100;
 }

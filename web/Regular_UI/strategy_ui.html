@@ -34,11 +34,345 @@
 
 <body onload="joystick_main();PublishTopicSaveParam();MonitorSwitch(false);">
     <div>
+        
         <!----h2 class="animated infinite bounce"> Hello World!/h2-->
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Strategy UI</h4>
+                </div>
+                <div>
+                    <form style="width:420px;" name='form' id='new_strategy'>
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    <label>role</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="role" id = "role" onclick= "processFormData();">
+                                        <option value="Attacker">Attacker</option>
+                                        <option value="Supporter">Supporter</option>
+                                        <!----option value="Passer">Passer</option-->  
+                                    </select><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>game_start</label>
+                                </td>
+                                <td colspan="4" >
+                                    <input  id ="game_start" type="checkbox" onclick = "gameStart()" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>chase_straight</label>
+                                </td>
+                                <td colspan="4">
+                                    <input id ="chase_straight" type="checkbox" onclick= "processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Accelerate</label>
+                                </td>
+                                <td colspan="4">
+                                    <input id ="Accelerate" type="checkbox" onclick= "processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>ball_pwm</label>
+                                </td>
+                                <td colspan="4">
+                                    <input id ="ball_pwm" type="checkbox" onclick= "processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>shooting_start</label>
+                                </td>
+                                <td>
+                                    <input id ="shooting_start" type="checkbox" name="shooting_start" onclick= "processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>game_state</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="game_state" id = "game_state" onclick= "processFormData();">
+                                      　<option value="Kick_Off">Kick_Off</option>
+                                        <option value="Free_Kick">Free_Kick</option>
+                                        <option value="Free_Ball">Free_Ball</option>
+                                        <option value="Throw_In">Throw_In</option>
+                                        <option value="Coner_Kick">Coner_Kick</option>
+                                        <option value="Penalty_Kick">Penalty_Kick</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>run_point</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="run_point" id="run_point" onclick= "processFormData();">
+                                        <option value="none">none</option>
+                                　      <option value="empty_hand">empty_hand</option>
+                                    　  <option value="ball_hand">ball_hand</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>run_x</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>-300.0</label>
+                                </td>
+                                <td>
+                                    <input id="run_xSlider" name="run_x" type="range" min="-300.0" max="300.0" value="0.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>300.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="run_xInput" name="run_x"  value="0.0" type="number" min="-300.0" max="300.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>run_y</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>-200.0</label>
+                                </td>
+                                <td>
+                                    <input id="run_ySlider" name="run_y" type="range" min="-200.0" max="200.0" value="0.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>200.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="run_yInput" name="run_y" type="number" min="-200.0" max="200.0" value="0.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>run_yaw</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>-180.0</label>
+                                </td>
+                                <td>
+                                    <input id="run_yawSlider" name="run_yaw" type="range" min="-180.0" max="180.0" value="0.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>180.0</label>
+                                </td> 
+                                <td>
+                                    <input style="width:60px" id="run_yawInput" name="run_yaw" type="number" min="-180.0" max="180.0" value="0.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align:center;">
+                                    <input type='button' value="輸入定位點" onclick = "point_input()" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>our_side</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="our_side" id="our_side" onclick= "processFormData();">
+                                    　  <option value="Blue">Attack_Yellow(Blue)</option>
+                                      　<option value="Yellow">Attack_Blue(Yellow)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>attack_mode</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="attack_mode" id = "attack_mode" onclick= "processFormData();">
+                                        <option value="Attack">Attack</option>
+                                    　  <option value="Orbit">Orbit</option>
+                                    　  <option value="Cut">Cut</option>
+                                        <option value="Post_up">Post_up</option>
+                                        <option value="Defense">Defense</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>strategy_mode</label>
+                                </td>
+                                <td colspan="4">
+                                    <select style="width:300px" name="strategy_mode" id = strategy_mode onclick= "processFormData();">
+                                        <option value="Fast_break">Fast_break</option>
+                                    　  <option value="At_Orbit">At_Orbit</option>
+                                    　  <option value="At_Post_up">Post_up</option>
+                                      　<option value="Defense_ball">Defense_ball</option>
+                                        <option value="Defense_goal">Defense_goal</option>    
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>orb_attack_ang</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0.0</label>
+                                </td>
+                                <td>
+                                    <input id="orb_attack_angSlider" name="orb_attack_ang" type="range" min="0.0" max="20.0" value="5.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>20.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="orb_attack_angInput" name="orb_attack_ang" type="number" min="0.0" max="20.0" value="5.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>atk_shoot_ang</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0.0</label>
+                                </td>
+                                <td>
+                                    <input id="atk_shoot_angSlider" name="atk_shoot_ang" type="range" min="0.0" max="10.0" value="10.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>10.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="atk_shoot_angInput" name="atk_shoot_ang" type="number" min="0.0" max="10.0" value="10.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>atk_shoot_dis</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0.0</label>
+                                </td>
+                                <td>
+                                    <input id="atk_shoot_disSlider" name="atk_shoot_dis" type="range" min="0.0" max="500.0" value="300.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>500.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="atk_shoot_disInput" name="atk_shoot_dis" type="number" min="0.0" max="500.0" value="300.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>minimum_w</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0.0</label>
+                                </td>
+                                <td>
+                                    <input id="minimum_wSlider" name="minimum_w" type="range" min="0.0" max="5.0" value="1.2" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>5.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" style="width:60px" id="minimum_wInput" name="minimum_w" type="number" min="0.0" max="5.0" value="1.2" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>maximum_w</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>10.0</label>
+                                </td>
+                                <td>
+                                    <input id="maximum_wSlider" name="maximum_w" type="range" min="10.0" max="100.0" value="35.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>100.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="maximum_wInput" name="maximum_w" type="number" min="10.0" max="100.0" value="35.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>minimum_v</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0.0</label>
+                                </td>
+                                <td>
+                                    <input id="minimum_vSlider" name="minimum_v" type="range" min="0.0" max="5.0" value="5.0" step="0.1" oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>5.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="minimum_vInput" name="minimum_v" type="number" min="0.0" max="5.0" value="5.0" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>maximum_v</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>10.0</label>
+                                </td>
+                                <td>
+                                    <input id="maximum_vSlider" name="maximum_v" type="range" min="10.0" max="100.0" value="50.0" step="0.1"  oninput="ToInputValue(this.value,this.name,1);change_maxw(this.value);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>10.0</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="maximum_vInput" name="maximum_v" type="number" min="10.0" max="100.0" value="50.0" oninput="ToSliderValue(this.value,this.name,0);change_maxw(this.value);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>ballhandle_dis</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0</label>
+                                </td>
+                                <td>
+                                    <input id="ballhandle_disSlider" name="ballhandle_dis" type="range" min="0" max="50" value="28"  oninput="ToInputValue(this.value,this.name,1);processFormData();">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>50</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="ballhandle_disInput" name="ballhandle_dis" type="number" min="0" max="50" value="28" oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>ballhandle_ang</label>
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>0</label>
+                                </td>
+                                <td>
+                                    <input id="ballhandle_angSlider" name="ballhandle_ang" type="range" min="0" max="50" value="5"  oninput="ToInputValue(this.value,this.name,1);">
+                                </td>
+                                <td style="text-align:center;">
+                                    <label>50</label>
+                                </td>
+                                <td>
+                                    <input style="width:60px" id="ballhandle_angInput" name="ballhandle_ang" type="number" min="0" max="50" value="5"  oninput="ToSliderValue(this.value,this.name,0);processFormData();">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
                 <!-- TopButttonDiv -->
                 <div id="ClickMeDiv">
@@ -49,13 +383,13 @@
                         <tr>
                             <td>
                                 <div>
-                                    <input id="StartInput" type="radio" name="SwitchButton" onclick="PublishTopicGameState(1);" />
+                                    <input id="StartInput" type="radio" name="SwitchButton" onclick="PublishTopicGameState(1);start_state();" />
                                     <label id="StartButton" for="StartInput">Start</label>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <input id="StopInput" type="radio" checked="checked" name="SwitchButton" onclick="PublishTopicGameState(0);StrategyStop()" />
+                                    <input id="StopInput" type="radio" checked="checked" name="SwitchButton" onclick="PublishTopicGameState(0);StrategyStop();all_stop();" />
                                     <label id="StopButton" for="StopInput">Stop</label>
                                 </div>
                             </td>
@@ -67,14 +401,14 @@
                         <tr>
                             <td>
                                 <div>
-                                    <input id="YellowButton" type="radio" name="TeamButton" onclick="PublishTopicTeamColor('Yellow');attack_way()" />
-                                    <label id="YellowButton" for="YellowButton">Yellow</label>
+                                    <input id="YellowButton" type="radio" name="TeamButton" onclick="PublishTopicTeamColor('Yellow');attack_way();change_side();" />
+                                    <label id="YellowButtonlable" for="YellowButton">Yellow</label>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <input id="BlueButton" type="radio" name="TeamButton" onclick="PublishTopicTeamColor('Blue');attack_way()" />
-                                    <label id="BlueButton" for="BlueButton">Blue</label>
+                                    <input id="BlueButton" type="radio" name="TeamButton" onclick="PublishTopicTeamColor('Blue');attack_way();change_side();" />
+                                    <label id="BlueButtonlable" for="BlueButton">Blue</label>
                                 </div>
                             </td>
                         </tr>
@@ -226,7 +560,7 @@
                                     </td>
                                     <td>
                                         <div style="width: 120px">
-                                            <input id="RobotOneButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(1)" />
+                                            <input id="RobotOneButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(1);change_robot(1);" />
                                             <label id="RobotOneButton" for="RobotOneButton">Robot 1</label>
                                         </div>
                                     </td>
@@ -242,7 +576,7 @@
                                     </td>
                                     <td>
                                         <div style="width: 120px">
-                                            <input id="RobotTwoButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(2)" />
+                                            <input id="RobotTwoButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(2);change_robot(2);" />
                                             <label id="RobotTwoButton" for="RobotTwoButton">Robot 2</label>
                                         </div>
                                     </td>
@@ -258,7 +592,7 @@
                                     </td>
                                     <td>
                                         <div style="width: 120px">
-                                            <input id="RobotThreeButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(3)" />
+                                            <input id="RobotThreeButton" type="radio" name="RobotStateButton" onclick="GetChooseRobot(3);change_robot(3);" />
                                             <label id="RobotThreeButton" for="RobotThreeButton">Robot 3</label>
                                         </div>
                                     </td>
@@ -4551,9 +4885,10 @@
     <script src="js/HoldBall.js"></script>
     <script src="js/video.js"></script>
     <script src="js/variable.js"></script>
+    <script src="js/d_RosParam.js"></script>
+    <script src="js/d_RosService.js"></script>
 
 </body>
 
 </html>
-
 

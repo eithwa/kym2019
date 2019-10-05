@@ -190,19 +190,19 @@ function draw_robot_map(){
     let ground_reverse = document.getElementById("GroundButton").checked;
     let MCLmap_checked = document.getElementById("MCLmap").checked;
 
-    if(!MCLmap_checked&&!map_checked){
+    if(!map_checked){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         var sigma_error = 20;
         
         ctx.beginPath();
 
-        draw_robot(1,sigma1,x1,y1,x1_,y1_,catchball1,imu1);
-        draw_robot(2,sigma2,x2,y2,x2_,y2_,catchball2,imu2);
-        draw_robot(3,sigma3,x3,y3,x3_,y3_,catchball3,imu3);
+        draw_robot(1,sigma1,x1,y1,x1_,y1_,catchball1,imu1,move_angle3);
+        draw_robot(2,sigma2,x2,y2,x2_,y2_,catchball2,imu2,move_angle3);
+        draw_robot(3,sigma3,x3,y3,x3_,y3_,catchball3,imu3,move_angle3);
         ball_condition();
     }
 }
-function draw_robot(num,sigma,x,y,x_,y_,catchball,imu){
+function draw_robot(num,sigma,x,y,x_,y_,catchball,imu,move_angle){
     if(sigma!=null){
         let ground_reverse = document.getElementById("GroundButton").checked;
         let canvas = document.getElementById("robot_map");
@@ -230,6 +230,16 @@ function draw_robot(num,sigma,x,y,x_,y_,catchball,imu){
         ctx.moveTo(center_x + (x * 0.877), center_y - (y * 0.88));
         ctx.lineTo(center_x + (x_ *0.877), center_y - (y_ * 0.88));
         ctx.stroke();
+        //=================================
+        //console.log(move_angle);
+        x_= x+50 * Math.cos(move_angle+angle_imu);
+        y_= y+50 * Math.sin(move_angle+angle_imu);
+        x_=Math.round(x_);
+        y_=Math.round(y_);
+        ctx.moveTo(center_x + (x * 0.877), center_y - (y * 0.88));
+        ctx.lineTo(center_x + (x_ *0.877), center_y - (y_ * 0.88));
+        ctx.stroke();
+        //=================================
         ctx.closePath();
         ctx.beginPath();
         ctx.strokeStyle = '#FF0000';
@@ -365,7 +375,7 @@ function ImuReset() {
         console.log(w2-90);
         imu_pub2.publish(msg);
     }
-    else{
+    else if(robot_checked3){
         var msg = new ROSLIB.Message({
           data: w3-90 
         });
@@ -412,11 +422,10 @@ function CoordReset() {
 
     }
     else if(robot_checked2){
-       
         resetParticles2.publish(msg);
         reset_bool=false;
     }
-    else{
+    else if(robot_checked3){
         resetParticles3.publish(msg);
         reset_bool=false;
     }
@@ -444,7 +453,7 @@ function CoordReverse() {
         });
         resetParticles2.publish(msg);
     }
-    else{
+    else if(robot_checked3){
         var msg = new ROSLIB.Message({
             init: true,
             x: -x3,
@@ -604,7 +613,9 @@ var cmdVel3 = new ROSLIB.Topic({
     name: 'motion/cmd_vel',
     messageType: '/geometry_msgs/Twist'
 });
-
+cmdVel3.subscribe(function(msg) {
+    move_angle3 = Math.atan2(-msg.linear.x,msg.linear.y);
+});
 function StrategyStop() {
     setTimeout(StandBy, 0);
     setTimeout(StandBy, 100);
@@ -1008,5 +1019,4 @@ function HoldBallSwitch(state,robot) {
     if (CheckIP[2] == 1 && robot == 3)
         HoldBall3.publish(check);
 }
-
 

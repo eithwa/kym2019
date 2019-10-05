@@ -15,7 +15,9 @@
 #include <signal.h>
 #include <std_msgs/Int32.h>
 #include <std_msgs/Int32MultiArray.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <fstream>
+#include "imu_3d/inertia.h"
 #include "vision/center.h"
 #include "vision/black.h"
 #include "vision/bin.h"
@@ -86,17 +88,22 @@ class NodeHandle
 	//==============distance==================
 	double camera_f(double Omni_pixel);
 	double Omni_distance(double pixel_dis);
-    void pub_obstacle(vector<DetectedObject> obstacle);
-    void Pub_obstacleframe(Mat frame);
+    vector<int> obstacle_info;
+    double imu_angle;
+    int robot_x;
+    int robot_y;
 
   private:
 	ros::NodeHandle nh;
 	ros::Subscriber save_sub;
+    ros::Subscriber obstacle_sub;
+    ros::Subscriber imu_sub;
+    ros::Subscriber robot_sub;
 	void SaveButton_setting(const vision::bin msg);
+    void obstacle_setting(const std_msgs::Int32MultiArray msg);
+    void imuCallback(const imu_3d::inertia msg);
+    void robotCallback(const geometry_msgs::PoseWithCovarianceStamped msg);
 	int SaveButton;
 	//==============black====================
 	void blackcall(const vision::black msg);
-    ros::Publisher obstacle_pub;
-    ros::Publisher obstacleframe_pub;
-    int Strategy_Angle(int angle);
 };

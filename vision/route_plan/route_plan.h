@@ -8,7 +8,7 @@ class Vision : protected NodeHandle
     ~Vision();
     void release();
     cv::Mat Black_Item(const cv::Mat iframe);
-    
+    void draw_field();
   private:
     ros::NodeHandle nh;
     ros::Subscriber image_sub;
@@ -20,6 +20,10 @@ class Vision : protected NodeHandle
     void draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, int obj_angle, int color);
     double Rate();
     double FrameRate;
+    void route_plan(int r_x, int r_y, vector<int> obstacle_info, int goal_dis, int goal_ang);
+
+    int v_ang;
+    int v_yaw;
     //==========================================
     cv::Mat Source;
     cv::Mat threshold;

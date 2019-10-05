@@ -27,6 +27,7 @@ public:
     Localization();
     ~Localization();
     void draw_particles();
+    void draw_field();
 private:
     MCL mcl;
     Mat field_map;
@@ -65,5 +66,4 @@ private:
     void Readyaml();
     void Saveyaml();
     void get_parameter();
-    void draw_field();
 };

@@ -1,4 +1,4 @@
-#include "obstacle.h"
+#include "route_plan.h"
 
 void SigintHandler(int sig)
 {
@@ -8,13 +8,14 @@ void SigintHandler(int sig)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "obstacle");
+    ros::init(argc, argv, "route_plan");
     ros::NodeHandle h_node;
     signal(SIGINT, SigintHandler);
     Vision cam("camera/image_raw");
     
     ros::Rate loop_rate(200);
     while(ros::ok()){
+        cam.draw_field();
         ros::spinOnce();
         loop_rate.sleep();
     }

@@ -152,6 +152,7 @@ foreach(
     black_item
     localization_white_line
     obstacle
+    route_plan
 )
 add_subdirectory(${subdir})
 endforeach()

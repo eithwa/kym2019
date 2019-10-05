@@ -134,11 +134,10 @@ function keysdown(e) {
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
         }
-        //J shoot
+        //shoot key space
         if(keys[74]){
             PublishTopicShoot(parseInt(document.getElementById('ShootInput').value));
         }
-        //I holdball
         if(keys[73]){
             if (RemoteState) {
                 if (ChooseRobot == 1) {
@@ -159,6 +158,7 @@ function keysdown(e) {
             $('#StartInput').change();
             $('#StopInput').prop('checked',true);
             $('#StopInput').change();
+            all_stop();
         }
         // O start 
         else if (keys[79]) {
@@ -167,6 +167,7 @@ function keysdown(e) {
             $('#StartInput').change();
             $('#StopInput').prop('checked',false);
             $('#StopInput').change();
+            start_state();
         }
 
     }
@@ -222,4 +223,3 @@ function keyuped(e) {
         keys[e.keyCode] = false;
     }
 }
-

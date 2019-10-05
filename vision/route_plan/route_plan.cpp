@@ -1,5 +1,7 @@
-#include "obstacle.h"
-
+#include "route_plan.h"
+#define TEST ros::package::getPath("vision")+"/route_plan/image.png"
+#define TO_RAD M_PI/180.0
+#define TO_DEG 180.0/M_PI
 Vision::Vision()
 {
     //image_sub = nh.subscribe(VISION_TOPIC, 1,static_cast<void (Vision::*)(const sensor_msgs::ImageConstPtr&)>(&Vision::imageCb),this);
@@ -7,7 +9,7 @@ Vision::Vision()
 }
 Vision::Vision(string topic)
 {
-    image_sub = nh.subscribe(topic, 1, &Vision::imageCb, this);
+    //image_sub = nh.subscribe(topic, 1, &Vision::imageCb, this);
 }
 Vision::~Vision()
 {
@@ -57,11 +59,10 @@ void Vision::imageCb(const sensor_msgs::ImageConstPtr &msg)
 
             Mat blackline = Black_Item(Source);
 
-            //cv::imshow("Image window", cv_ptr->image);
+            cv::imshow("Image window", cv_ptr->image);
             //cv::imshow("blackline", blackline);
-            //cv::imshow("monitor", monitor);
+            cv::imshow("monitor", monitor);
             //cv::waitKey(10);
-            Pub_obstacleframe(monitor);
         }
     }
     catch (cv_bridge::Exception &e)
@@ -137,7 +138,6 @@ cv::Mat Vision::Black_Item(const cv::Mat iframe)
                 threshold.data[(y * threshold.cols + x) * 3 + 2] == 0 )
             {
                 Mark_point(frame_, find_point, distance, find_angle, x, y, object_size, color);
-                Mark_point(monitor, find_point, distance, find_angle, x, y, object_size, color);
 
                 FIND_Item.dis_max = distance;
                 FIND_Item.dis_min = distance;
@@ -192,10 +192,9 @@ cv::Mat Vision::Black_Item(const cv::Mat iframe)
         draw_ellipse(monitor, obj_item.at(i), 5);
         circle(monitor, Point(x, y), 3, Scalar(0, 0, 200), -1);
     }
-    pub_obstacle(obj_item);
-    //cv::imshow("threshold", threshold);
-    //cv::imshow("frame_", frame_);
-    //cv::waitKey(10);
+    cv::imshow("threshold", threshold);
+    cv::imshow("frame_", frame_);
+    cv::waitKey(10);
     return oframe;
 }
 void Vision::Mark_point(Mat &frame_, deque<int> &find_point, int distance, int angle, int x, int y, int &size, int color)
@@ -240,8 +239,8 @@ void Vision::find_around_black(Mat &frame_, deque<int> &find_point, int distance
         for (int j = -1; j < 2; j++)
         {
             dis_f = distance + i * Magn_Near_GapMsg;
-            if (dis_f < InnerMsg)
-                dis_f = InnerMsg;
+            if (dis_f < Magn_Near_StartMsg)
+                dis_f = Magn_Near_StartMsg;
 
             //dis_f = Frame_Area(dis_f, Magn_Far_EndMsg);
             if(dis_f>Magn_Far_StartMsg)break;
@@ -275,8 +274,7 @@ void Vision::find_around_black(Mat &frame_, deque<int> &find_point, int distance
 					
             if (threshold.data[(y * threshold.cols + x) * 3 + 0] == 0 && frame_.data[(y * frame_.cols + x) * 3 + 0] == 0)
             {
-                Mark_point(frame_, find_point, dis_f, ang_f, x, y, size, color);
-                Mark_point(monitor, find_point, dis_f, ang_f, x, y, size, color);	
+                Mark_point(frame_, find_point, dis_f, ang_f, x, y, size, color);	
             }
         }
     }
@@ -315,4 +313,187 @@ void Vision::draw_Line(Mat &frame_, int obj_distance_max, int obj_distance_min, 
         line(frame_, Point(x[0], y[0]), Point(x[1], y[1]), Scalar(0, 255, 255), 1);
     }
 }
+void Vision::draw_field()
+{
+    Mat img = imread(TEST, CV_LOAD_IMAGE_COLOR);
 
+    int center_x = img.cols/2;
+    int center_y = img.rows/2;
+    
+    //=========draw robot==========
+    int x = center_x+robot_x;
+    int y = center_y-robot_y;
+
+    circle(img, Point(x, y), 20, Scalar(0, 255, 255), 2);
+    
+    int x_= x+20 * cos(imu_angle * TO_RAD);
+    int y_= y-20 * sin(imu_angle * TO_RAD);
+
+    line(img, Point(x, y), Point(x_, y_), Scalar(0, 255, 255), 2);
+    //==============================
+    //=========draw obstacle========
+    for(int i=0; i<obstacle_info.size(); i+=4){
+        int distance  = obstacle_info.at(i+0);
+        int angle     = obstacle_info.at(i+1)+imu_angle;
+        int angle_right = obstacle_info.at(i+2)+imu_angle;
+        int angle_left = obstacle_info.at(i+3)+imu_angle;
+        
+        if(angle_right > 180) angle_right = angle_right - 360;
+        if(angle_right <-180) angle_right = angle_right + 360;
+        if(angle_left  > 180) angle_left  = angle_left  - 360;
+        if(angle_left  <-180) angle_left  = angle_left  + 360;
+        
+        if(angle_right < angle_left)angle_right = 360 + angle_right;
+        //cout<<angle_right<<"  "<<angle_left<<"  "<<endl;
+        int o_x = x + distance * cos(angle * TO_RAD);
+        int o_y = y - distance * sin(angle * TO_RAD);
+    
+        if(abs(o_y-center_y)>200){
+            ellipse(img, Point(x, y), Size(distance, distance), 0, 360 - angle_right, 360 - angle_left, Scalar(0, 0, 255), 2);
+        }else{
+            ellipse(img, Point(x, y), Size(distance, distance), 0, 360 - angle_right, 360 - angle_left, Scalar(0, 0, 0), 2);
+        }
+        circle(img, Point(o_x, o_y), 3, Scalar(0, 0, 255), -1);
+        
+    }
+    int b_goal_x = 300+50;
+    int b_goal_y = 0;
+    circle(img, Point(center_x+b_goal_x, center_y-b_goal_y), 3, Scalar(0, 0, 255), -1);
+    int g_ang = atan2(b_goal_y-robot_y, b_goal_x-robot_x)*TO_DEG - imu_angle;
+    if(g_ang  > 180) g_ang  = g_ang  - 360;
+    if(g_ang  <-180) g_ang  = g_ang  + 360;
+    //cout<<b_ang<<"  " <<imu_angle<<endl;
+    int g_dis = sqrt(pow(b_goal_y-robot_y,2)+pow(b_goal_x-robot_x,2)); 
+    x_= x+g_dis * cos((imu_angle+g_ang) * TO_RAD);
+    y_= y-g_dis * sin((imu_angle+g_ang) * TO_RAD);
+    line(img, Point(x, y), Point(x_, y_), Scalar(255, 0, 0), 2);
+
+    
+    //==============================
+    //========route_plan============
+    route_plan(robot_x, robot_y, obstacle_info, g_dis, g_ang);
+    //==============================
+    x_= x+120 * cos((imu_angle+v_ang) * TO_RAD);
+    y_= y-120 * sin((imu_angle+v_ang) * TO_RAD);
+    line(img, Point(x, y), Point(x_, y_), Scalar(0, 0, 255), 15);
+
+    x_= x+40 * cos((imu_angle+v_yaw) * TO_RAD);
+    y_= y-40 * sin((imu_angle+v_yaw) * TO_RAD);
+    line(img, Point(x, y), Point(x_, y_), Scalar(255, 255, 0), 2);
+
+    imshow("img",img);
+    waitKey(10);
+}
+
+void Vision::route_plan(int r_x, int r_y, vector<int> obstacle_info, int goal_dis, int goal_ang)
+{
+    //===========場外障礙過慮============
+    vector <int> obstacle_filter;
+    for(int i=0; i<obstacle_info.size(); i+=4){
+        int distance = obstacle_info.at(i+0);
+        int angle     = obstacle_info.at(i+1)+imu_angle;
+        int o_x = r_x  + distance * cos(angle * TO_RAD);
+        int o_y = -r_y - distance * sin(angle * TO_RAD);
+        if(abs(o_y)<200){
+            obstacle_filter.push_back(obstacle_info.at(i+0));
+            obstacle_filter.push_back(obstacle_info.at(i+1));
+            obstacle_filter.push_back(obstacle_info.at(i+2));
+            obstacle_filter.push_back(obstacle_info.at(i+3));
+        }
+    }
+    //=================================
+    //===========背向權重計算===========
+    int rf_x=0;
+    int rf_y=0;
+    int dis_threshold = 200;
+    for(int i=0; i<obstacle_filter.size(); i+=4){
+        int distance = obstacle_filter.at(i+0);
+        int angle    = obstacle_filter.at(i+1)-180;
+        if(angle<-180)angle = angle+360;
+        if(distance<dis_threshold){
+            rf_x += (dis_threshold-distance)*cos(angle*TO_RAD);
+            rf_y += (dis_threshold-distance)*sin(angle*TO_RAD);
+        }
+    }
+    v_yaw = atan2(rf_y,rf_x)*TO_DEG;
+    //cout<<v_yaw<<endl;
+    //=================================
+    //============避障路徑規劃==========
+    vector <int> route_ang;
+    route_ang.push_back(goal_ang);
+    int ang_threshold = 180;
+    int two_robot_dis = 40;
+    //cout<<obstacle_filter.size()<<endl;
+    for(int i=0; i<obstacle_filter.size(); i+=4){
+        int distance = obstacle_filter.at(i+0);
+        int angle    = obstacle_filter.at(i+1);
+        if(abs(angle-goal_ang)<ang_threshold || abs(360-abs(angle-goal_ang))<ang_threshold){
+            int tmp = sqrt(pow(distance,2)-pow(two_robot_dis,2));
+            //cout<<distance<<endl;
+            //cout<<tmp<<endl;
+            int escape_ang = atan2(tmp, two_robot_dis)*TO_DEG;
+            if(distance<=two_robot_dis+5 || escape_ang>70)escape_ang = 70;
+            //cout<<escape_ang<<endl;
+            int angle_right = angle+escape_ang;
+            int angle_left  = angle-escape_ang;
+            if(angle_right > 180) angle_right = angle_right - 360;
+            if(angle_right <-180) angle_right = angle_right + 360;
+            if(angle_left  > 180) angle_left  = angle_left  - 360;
+            if(angle_left  <-180) angle_left  = angle_left  + 360;
+            route_ang.push_back(angle_right);
+            route_ang.push_back(angle_left);
+            //cout<<angle_right<<endl;
+            //v_ang = angle_right;
+        }
+    }
+
+    //清除被阻擋角度
+    vector <int> route_ang_filter;
+    //cout<<"fuck  "<<goal_ang<<" "<<route_ang.at(0)<<endl;
+    cout<<"route  "<<route_ang.size()<<endl;
+    for(int j=0; j<route_ang.size(); j++){
+        bool cross_flag = true;
+        cout<<route_ang.at(j)<<endl;
+        for(int i=0; i<obstacle_filter.size(); i+=4){
+            int dis = obstacle_filter.at(i+0);
+            int ang = obstacle_filter.at(i+1);
+            int min_ang = (abs(route_ang.at(j)-ang) < abs(360-abs(route_ang.at(j)-ang)) )?abs(route_ang.at(j)-ang):abs(360-abs(route_ang.at(j)-ang));
+            int cross_dis = abs((double)(dis/(double)cos(min_ang*TO_RAD))*(double)sin(min_ang*TO_RAD));
+            //cout<<"dis "<<dis<<"  "<<ang<<"  cross dis "<<cross_dis<<"  "<<min_ang<<endl;
+            
+
+            int angle     = route_ang.at(j)+imu_angle;
+            int x = r_x  + 100 * cos(angle * TO_RAD);
+            int y = -r_y - 100 * sin(angle * TO_RAD);
+
+            if(cross_dis < two_robot_dis -10 && min_ang<90) cross_flag=false;
+            //cout<<"x "<<x<<" y "<<y<<endl;
+            if(abs(x)>300||abs(y)>200)cross_flag=false;
+        }
+        //cout<<endl;
+        if(cross_flag ==true){
+            route_ang_filter.push_back(route_ang.at(j));
+        }
+    }
+    //找最小角度
+    int min_ang = 999;
+    int good_ang;
+    cout<<"filter "<<route_ang_filter.size()<<endl;
+    if(!route_ang_filter.empty()){
+        for(int i=0; i<route_ang_filter.size(); i++){
+            int ang = (abs(route_ang_filter.at(i)-goal_ang) < abs(360-abs(route_ang_filter.at(i)-goal_ang)) )?abs(route_ang_filter.at(i)-goal_ang):abs(360-abs(route_ang_filter.at(i)-goal_ang));
+            //cout<<route_ang_filter.at(i)<<" "<<ang<<" "<<min_ang <<endl;
+            if(ang<abs(min_ang)){
+                //cout<<min_ang<<" "<<ang<<endl;
+                min_ang = ang;
+                good_ang = route_ang_filter.at(i);
+            }
+        }
+    }
+    int final_route_ang = goal_ang;
+    if(min_ang!=999){
+        final_route_ang = good_ang;
+    }
+    cout<<"final_route_ang " <<final_route_ang<<endl;
+    v_ang = final_route_ang;
+}

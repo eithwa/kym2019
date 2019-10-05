@@ -64,21 +64,21 @@
 
 /*==========================================================*/
 
-#YellowButton {
+#YellowButtonlable {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     color: #663D00;
 }
 
-#YellowButton.ui-state-hover {
+#YellowButtonlable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     background-color: #FFF;
 }
 
-#YellowButton.ui-state-active {
+#YellowButtonlable.ui-state-active {
     background-color: #FFCC00;
     font-size: 17px;
     color: #1A1A65;
@@ -87,21 +87,21 @@
 
 /*==========================================================*/
 
-#BlueButton {
+#BlueButtonlable {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     color: #663D00;
 }
 
-#BlueButton.ui-state-hover {
+#BlueButtonlable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 17px;
     background-color: #FFF;
 }
 
-#BlueButton.ui-state-active {
+#BlueButtonlable.ui-state-active {
     background-color: #FFCC00;
     font-size: 17px;
     color: #1A1A65;
