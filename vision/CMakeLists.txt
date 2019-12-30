@@ -153,6 +153,8 @@ foreach(
     localization_white_line
     obstacle
     route_plan
+    killer
+    strategy_controler
 )
 add_subdirectory(${subdir})
 endforeach()

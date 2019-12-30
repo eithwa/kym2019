@@ -20,7 +20,7 @@ function keysdown(e) {
         }
        
         // I hold ball
-        if (keys[79]) {
+        if (keys[73]) {
             //console.log(e.keyCode);
             holdball();
         }
@@ -32,8 +32,8 @@ function keysdown(e) {
         if (keys[80]) {
             topicROSGameState(0);
         }
-        // N chase switch
-        if (keys[78]) {
+        // Y chase switch
+        if (keys[89]) {
             let chase = document.getElementById("ChaseButton").checked;
             if(chase){
                 $('#ChaseButton').prop('checked',false);
