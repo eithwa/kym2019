@@ -42,7 +42,8 @@ void NodeHandle::Readyaml()
     }
     else
     {
-        cout << "yaml file does not exist" << endl;
+	ROS_ERROR("YAML file does NOT exist");
+        //cout << "yaml file does not exist" << endl;
     }
     Parameter_getting();
 }
@@ -52,16 +53,22 @@ void NodeHandle::Saveyaml()
     std::string temp = "rosparam dump " + param + " FIRA/vision";
     const char *save = temp.c_str();
     system(save);
-
     cout << "Save the yaml file" << endl;
     Parameter_getting();
+}
+void NodeHandle::Saveprosilica()
+{
+    std::string param = PROSILICA_PATH;
+    std::string temp = "rosparam dump " + param + " prosilica_driver";
+    const char *save = temp.c_str();
+    system(save);
+    cout << "Save prosilica_driver parameter" << endl;
 }
 void NodeHandle::Parameter_getting()
 {
     cout << "get parameter" << endl;
     //===================FPS參數==========================
     nh.getParam("FIRA/vision/FPS", fpsMsg);
-    set_campara(fpsMsg);
     //===================中心參數=========================
     nh.getParam("FIRA/vision/Center/Center_X", CenterXMsg);
     nh.getParam("FIRA/vision/Center/Center_Y", CenterYMsg);
@@ -100,12 +107,13 @@ void NodeHandle::Parameter_getting()
 //======================前置處理結束=======================
 //========================save===========================
 bool NodeHandle::savecall(std_srvs::Empty::Request  &req,
-         std_srvs::Empty::Response &res)
+                          std_srvs::Empty::Response &res)
 {
-	//cout<<"Save\n";
+    //cout<<"Save\n";
     Saveyaml();
+    Saveprosilica();
     HSVmap();
-	return true;
+    return true;
 }
 //========================mode===========================
 void NodeHandle::modebuttoncall(const vision::parameterbutton msg)
