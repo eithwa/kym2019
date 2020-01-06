@@ -55,7 +55,6 @@ function GroundSwitch(checked) {
     let ctx=canvas.getContext("2d");
     ctx.clearRect(0,0,canvas.width,canvas.height);
     
-    //console.log('111111');
 //==================
     let video = document.getElementById("canvasMap");
     let map = document.getElementById("LocalizationButton").checked;
@@ -73,16 +72,11 @@ function GroundSwitch(checked) {
         if(whiteline==false){
           if (checked == false) {
               video.src = "img/LcGround.png";
-              //console.log("11111111");
           }else{
               video.src = "img/LcGround2.png";
           }
         }
     }
-
-
-    //let canva;
-	//let ctx;
 
     let map_width = 1000;
     let map_height = 723;
@@ -209,3 +203,4 @@ ResetMap.addEventListener("mouseleave", function(e) {
     mouse_clicked = false;
     //console.log("mouseleave");
 });
+

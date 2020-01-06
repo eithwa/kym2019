@@ -48,3 +48,4 @@ var points = [[100,95], [363,95], [577,95], [840,95],
 //======================================
 var get_path=false;
 var Path=[];
+var whitepointbox=[];

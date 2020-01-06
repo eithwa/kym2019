@@ -37,6 +37,16 @@ ball.subscribe(function(msg) {
     //imu_3d_w=-msg.yaw+90/180*Math.PI;
     //console.log(msg.yaw);
 });
+//=====================================================================================
+//whitepoint
+var whitepoint = new ROSLIB.Topic({
+    ros: ros,
+    name: 'vision/mcl/WhiteRealDis',
+    messageType: 'std_msgs/Int32MultiArray'
+});
+whitepoint.subscribe(function(msg) {
+    whitepointbox = msg.data;
+});
 //=======================================================
 var imu_3d = new ROSLIB.Topic({
     ros: ros,
@@ -145,87 +155,93 @@ coord.subscribe(function(msg) {
             ctx.lineWidth = 10;
             ctx.strokeStyle = '#FF0000';
         }
+        let robotx, roboty, robotx_, roboty_, imux_, imuy_, ballx, bally;
+        let ballangle = (ball_angle+w)/180*pi;
+        let x_ball = Math.round(x+ball_distance * Math.cos(ballangle));
+        let y_ball = Math.round(y+ball_distance * Math.sin(ballangle));
+        
         if(ground_reverse==false){
-            ctx.beginPath();
-            ctx.arc(center_x+(x*1.3), center_y-(y*1.3), 23, 0, 2*Math.PI);
-            ctx.moveTo(center_x+(x*1.3), center_y-(y*1.3));
-            ctx.lineTo(center_x+(x_*1.3), center_y-(y_*1.3));
-            ctx.stroke();
-            ctx.closePath();
-            //==========imu============
-            ctx.beginPath();
-            ctx.strokeStyle = '#FF0000';
-            ctx.lineWidth = 3;
-            ctx.moveTo(center_x+(x*1.3), center_y-(y*1.3));
-            ctx.lineTo(center_x+(x_imu*1.3), center_y-(y_imu*1.3));
-            ctx.stroke();
-            ctx.closePath();
-            
-            //===========ball===========
-            if(ball_angle!=999){
-              ctx.beginPath();
-              let x_ball,y_ball,angle_ball;
-              angle_ball = (ball_angle+w)/180*pi;
-              x_ball= x+ball_distance * Math.cos(angle_ball);
-              y_ball= y+ball_distance * Math.sin(angle_ball);
-              x_ball=Math.round(x_ball);
-              y_ball=Math.round(y_ball);
-              //ctx.lineWidth = 1;
-              //ctx.strokeStyle = '#FFFF00';
-              //ctx.moveTo(center_x+(x*1.3), center_y-(y*1.3));
-              //ctx.lineTo(center_x+(x_ball*1.3), center_y-(y_ball*1.3));
-              ctx.arc(center_x + (x_ball * 1.3), center_y - (y_ball * 1.3),15,0,360,false);
-              ctx.fillStyle="red";//填充颜色,默认是黑色
-              ctx.fill();//画实心圆
-              ctx.closePath();
-              ctx.beginPath();
-              ctx.strokeStyle = '#000000';
-              ctx.arc(center_x+(x_ball*1.3), center_y-(y_ball *1.3), 15, 0, 2*Math.PI);
-              ctx.stroke();
-              ctx.closePath();
-            }
-        }else{
-            ctx.beginPath();
-            ctx.arc(center_x-(x*1.3), center_y+(y*1.3), 23, 0, 2*Math.PI);
-            ctx.moveTo(center_x-(x*1.3), center_y+(y*1.3));
-            ctx.lineTo(center_x-(x_*1.3), center_y+(y_*1.3));
-            ctx.stroke();
-            ctx.closePath();
-            //===========imu============
-            ctx.beginPath();
-            ctx.strokeStyle = '#FF0000';
-            ctx.lineWidth = 3;
-            ctx.moveTo(center_x-(x*1.3), center_y+(y*1.3));
-            ctx.lineTo(center_x-(x_imu*1.3), center_y+(y_imu*1.3));
-            ctx.stroke();
-            ctx.closePath();
-            //===========ball===========
-            if(ball_angle!=999){
-              ctx.beginPath();
-              let x_ball,y_ball,angle_ball;
-              angle_ball = (ball_angle+w)/180*pi;
-              x_ball= x+ball_distance * Math.cos(angle_ball);
-              y_ball= y+ball_distance * Math.sin(angle_ball);
-              x_ball=Math.round(x_ball);
-              y_ball=Math.round(y_ball);
-              //ctx.lineWidth = 1;
-              //ctx.strokeStyle = '#FFFF00';
-              //ctx.moveTo(center_x-(x*1.3), center_y+(y*1.3));
-              //ctx.lineTo(center_x-(x_ball*1.3), center_y+(y_ball*1.3));
-              ctx.arc(center_x - (x_ball * 1.3), center_y + (y_ball * 1.3),15,0,360,false);
-              ctx.fillStyle="red";//填充颜色,默认是黑色
-              ctx.fill();//画实心圆
-              ctx.closePath();
-              ctx.beginPath();
-              ctx.strokeStyle = '#000000';
-              ctx.arc(center_x-(x_ball*1.3), center_y+(y_ball*1.3), 15, 0, 2*Math.PI);
-              ctx.stroke();
-              ctx.closePath();
-            }
+            robotx = center_x+(x*1.3);
+            roboty = center_y-(y*1.3);
+            robotx_ = center_x+(x_*1.3);
+            roboty_ = center_y-(y_*1.3);
+            imux_ = center_x+(x_imu*1.3);
+            imuy_ = center_y-(y_imu*1.3);
+            ballx = center_x+(x_ball*1.3);
+            bally = center_y-(y_ball *1.3);
         }
-        //ctx.stroke();
+        else{
+            robotx = center_x-(x*1.3);
+            roboty = center_y+(y*1.3);
+            robotx_ = center_x-(x_*1.3);
+            roboty_ = center_y+(y_*1.3);
+            imux_ = center_x-(x_imu*1.3);
+            imuy_ = center_y+(y_imu*1.3);
+            ballx = center_x-(x_ball*1.3);
+            bally = center_y+(y_ball *1.3);
+        }
+        //==========robot=========
+        ctx.beginPath();
+        ctx.arc(robotx, roboty, 23, 0, 2*Math.PI);
+        ctx.moveTo(robotx, roboty);
+        ctx.lineTo(robotx_, roboty_);
+        ctx.stroke();
+        ctx.closePath();
+        //==========imu============
+        ctx.beginPath();
+        ctx.strokeStyle = '#FF0000';
+        ctx.lineWidth = 3;
+        ctx.moveTo(robotx, roboty);
+        ctx.lineTo(imux_, imuy_);
+        ctx.stroke();
+        ctx.closePath();
+        if(ball_angle!=999){
+            ctx.beginPath();
+            ctx.arc(ballx, bally,15,0,360,false);
+            ctx.fillStyle="red";//填充颜色,默认是黑色
+            ctx.fill();//画实心圆
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.strokeStyle = '#000000';
+            ctx.arc(ballx, bally, 15, 0, 2*Math.PI);
+            ctx.stroke();
+            ctx.closePath();
+        }
+        draw_whitepoint(x, y);
     }
 });
+function draw_whitepoint(x, y){
+    let ground_reverse = document.getElementById("GroundButton").checked;
+    let canvas = document.getElementById('robot_map');
+    let ctx=canvas.getContext("2d");
+    let center_x = canvas.width/2;
+    let center_y = canvas.height/2;
+    for(let i=0; i<whitepointbox.length; i+=2){
+        let xl=whitepointbox[i];
+        let yl=whitepointbox[i+1];
+        let angle = -Math.atan2(yl, xl)+w/180*Math.PI;
+        let distance = Math.sqrt(xl*xl+yl*yl);
+        
+        let x_point = Math.round(x+distance * Math.cos(angle));
+        let y_point = Math.round(y+distance * Math.sin(angle));
+        let pointx, pointy
+        if(ground_reverse==false){
+            pointx = center_x+(x_point * 1.3);
+            pointy = center_y-(y_point * 1.3);
+        }
+        else{
+            pointx = center_x+(x_point * 1.3);
+            pointy = center_y-(y_point * 1.3);
+        }
+        ctx.beginPath();
+        ctx.arc(pointx, pointy,3,0,360,false);
+        ctx.fillStyle="#33FFFF";//填充颜色,默认是黑色
+        ctx.fill();//画实心圆
+        ctx.closePath();
+
+    }
+    
+}
 var std = new ROSLIB.Topic({
     ros: ros,
     name: 'mcl/std',
@@ -435,7 +451,7 @@ function PublishTopicCmdVel(vec3) {
         }
     });
     if (RemoteState) {
-      console.log(twist);
+      //console.log(twist);
       cmdVel1.publish(twist);
     }
 }
@@ -452,6 +468,7 @@ function stop_robot(){
             z: 0
         }
     });
-    console.log(stop);
+    console.log("stop");
     cmdVel1.publish(twist);
 }
+

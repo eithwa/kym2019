@@ -1,3 +1,7 @@
+var interval;
+var timeout;
+var mouse_down = false
+
 function GetJoystickSpeed() {
     var speed = document.getElementById("SpeedInput").value;
     var Xspeed = parseFloat((joystick_V.x / Round_r) * speed);
@@ -86,6 +90,9 @@ function checkArea() {
         return 1;
     }
 }
+function continue_set_vel(e){
+    interval = setInterval(mousedown_set_vel,100,e);
+}
 
 joystick_canvas.addEventListener("mouseenter", function(e) {
     var pos = getMousePos(joystick_canvas, e);
@@ -93,76 +100,21 @@ joystick_canvas.addEventListener("mouseenter", function(e) {
 })
 
 joystick_canvas.addEventListener("mousedown", function(e) {
-    var pos = getMousePos(joystick_canvas, e);
-    Pos_Vector(pos);
-    console.log(e.button);
+    // interval = setInterval(mousedown_set_vel,100,e);
+    mouse_down = true;
     logButton = e.button;
-    if (e.button == 0) {
-        if (checkArea() == 1) {
-            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
-            drawjoystick(pos.x, pos.y);
-            mouse_click = 1;
-        }
-    } else if (e.button == 1) {
-        if (checkArea() == 1) {
-            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
-            joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, Round_r, 0, 2 * Math.PI);
-            joy_ctx.globalAlpha = 1;
-            joy_ctx.lineWidth = 16;
-            joy_ctx.fillStyle = "black"; //填充颜色,默认是黑色
-            joy_ctx.fill(); //画实心圆*/
-            boom.src = 'img/boom.png';
-            mouse_click = 1;
-
-            PublishTopicShoot(parseInt(document.getElementById('ShootInput').value));
-        }
-    } else if (e.button == 2) {
-        if (checkArea() == 1) {
-            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
-            drawjoystick_base_rightkey();
-            var radius = Math.sqrt(Math.pow((joystick_canvas.width / 2) - pos.x, 2) + Math.pow((joystick_canvas.height / 2) - pos.y, 2));
-            var c_length = Math.sqrt(Math.pow((joystick_canvas.width / 2) - pos.x, 2) + Math.pow((joystick_canvas.height / 2) - radius - pos.y, 2));
-            var h = Math.sqrt(Math.pow(radius, 2) - Math.pow(c_length / 2, 2));
-            var angle = Math.PI - 2 * Math.asin(h / radius);
-            var area = Math.pow(radius, 2) * angle / 2;
-            var rate = area / (Math.pow(Round_r, 2) * Math.PI / 2);
-            var speed = document.getElementById("SpeedInput").value;
-            var vec3 = new ROSLIB.Message({
-                x: 0,
-                y: 0,
-                z: 0
-            });
-            if (radius >= Round_r)
-                radius = Round_r;
-            joy_ctx.beginPath();
-            joy_ctx.moveTo(joystick_canvas.width / 2, joystick_canvas.height / 2);
-            if (((joystick_canvas.width / 2) - pos.x) < 0) {
-                joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, radius, 270 * Math.PI / 180, angle + 270 * Math.PI / 180, false);
-                var vec3 = new ROSLIB.Message({
-                    x: 0,
-                    y: 0,
-                    z: -parseFloat(1 * rate * speed)
-                });
-            } else {
-                joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, radius, 270 * Math.PI / 180 - angle, 270 * Math.PI / 180, false);
-                var vec3 = new ROSLIB.Message({
-                    x: 0,
-                    y: 0,
-                    z: parseFloat(1 * rate * speed)
-                });
-            }
-            joy_ctx.closePath();
-            joy_ctx.fillStyle = '#FFCEBE';
-            joy_ctx.fill();
-            //console.log(vec3);
-            PublishTopicCmdVel(vec3);
-            mouse_click = 1;
-        }
-    }
+    console.log(e.button);
+    continue_set_vel(e);
 })
 mouse_click = 1;
 
+
 joystick_canvas.addEventListener("mousemove", function(e) {
+    clearInterval(interval);
+    clearTimeout(timeout);
+    if(mouse_down)
+        timeout = setTimeout(continue_set_vel, 100,e);
+    
     var pos = getMousePos(joystick_canvas, e);
     Pos_Vector(pos);
     if (mouse_click == 1) {
@@ -222,7 +174,7 @@ joystick_canvas.addEventListener("mousemove", function(e) {
                 joy_ctx.closePath();
                 joy_ctx.fillStyle = '#FFCEBE';
                 joy_ctx.fill();
-                console.log(vec3);
+                //console.log(vec3);
                 PublishTopicCmdVel(vec3);
             }
         }
@@ -231,6 +183,9 @@ joystick_canvas.addEventListener("mousemove", function(e) {
 })
 
 joystick_canvas.addEventListener("mouseup", function(e) {
+    clearInterval(interval);
+    mouse_down = false;
+    logButton = -1;
     var pos = getMousePos(joystick_canvas, e);
     Pos_Vector(pos);
     if (mouse_click == 1) {
@@ -245,6 +200,9 @@ joystick_canvas.addEventListener("mouseup", function(e) {
 })
 
 joystick_canvas.addEventListener("mouseleave", function(e) {
+    clearInterval(interval);
+    mouse_down = false;
+    logButton = -1;    
     var pos = getMousePos(joystick_canvas, e);
     Pos_Vector(pos);
     if (mouse_click == 1) {
@@ -255,3 +213,78 @@ joystick_canvas.addEventListener("mouseleave", function(e) {
         drawjoystick(joystickcenter.x, joystickcenter.y);
     }
 })
+
+
+function mousedown_set_vel(e){
+    if(logButton == -1){
+        clearInterval(interval);
+        mouse_down = false;
+        return 0;
+    }
+    var pos = getMousePos(joystick_canvas, e);
+    Pos_Vector(pos);
+    //console.log("logButton",logButton);
+    if (logButton == 0) {
+        if (checkArea() == 1) {
+            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
+            drawjoystick(pos.x, pos.y);
+            mouse_click = 1;
+        }
+    } else if (logButton == 1) {
+        if (checkArea() == 1) {
+            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
+            joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, Round_r, 0, 2 * Math.PI);
+            joy_ctx.globalAlpha = 1;
+            joy_ctx.lineWidth = 16;
+            joy_ctx.fillStyle = "black"; //填充颜色,默认是黑色
+            joy_ctx.fill(); //画实心圆*/
+            boom.src = 'img/boom.png';
+            mouse_click = 1;
+
+            PublishTopicShoot(parseInt(document.getElementById('ShootInput').value));
+        }
+    } else if (logButton == 2) {
+        if (checkArea() == 1) {
+            joy_ctx.clearRect(0, 0, windowWidth, windowHeight);
+            drawjoystick_base_rightkey();
+            var radius = Math.sqrt(Math.pow((joystick_canvas.width / 2) - pos.x, 2) + Math.pow((joystick_canvas.height / 2) - pos.y, 2));
+            var c_length = Math.sqrt(Math.pow((joystick_canvas.width / 2) - pos.x, 2) + Math.pow((joystick_canvas.height / 2) - radius - pos.y, 2));
+            var h = Math.sqrt(Math.pow(radius, 2) - Math.pow(c_length / 2, 2));
+            var angle = Math.PI - 2 * Math.asin(h / radius);
+            var area = Math.pow(radius, 2) * angle / 2;
+            var rate = area / (Math.pow(Round_r, 2) * Math.PI / 2);
+            var speed = document.getElementById("SpeedInput").value;
+            var vec3 = new ROSLIB.Message({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+            if (radius >= Round_r)
+                radius = Round_r;
+            joy_ctx.beginPath();
+            joy_ctx.moveTo(joystick_canvas.width / 2, joystick_canvas.height / 2);
+            if (((joystick_canvas.width / 2) - pos.x) < 0) {
+                joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, radius, 270 * Math.PI / 180, angle + 270 * Math.PI / 180, false);
+                var vec3 = new ROSLIB.Message({
+                    x: 0,
+                    y: 0,
+                    z: -parseFloat(1 * rate * speed)
+                });
+            } else {
+                joy_ctx.arc(joystick_canvas.width / 2, joystick_canvas.height / 2, radius, 270 * Math.PI / 180 - angle, 270 * Math.PI / 180, false);
+                var vec3 = new ROSLIB.Message({
+                    x: 0,
+                    y: 0,
+                    z: parseFloat(1 * rate * speed)
+                });
+            }
+            joy_ctx.closePath();
+            joy_ctx.fillStyle = '#FFCEBE';
+            joy_ctx.fill();
+            //console.log(vec3);
+            PublishTopicCmdVel(vec3);
+            mouse_click = 1;
+        }
+    }
+}
+

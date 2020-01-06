@@ -70,7 +70,7 @@ function RemoteSwitch(state) {
 //cmd_vel
 var cmdVel1 = new ROSLIB.Topic({
     ros: ros,
-    name: 'motion/cmd_vel',
+    name: localStorage.SPEED_TOPIC,
     messageType: '/geometry_msgs/Twist'
 });
 function topicSaveParam(value){
@@ -81,24 +81,48 @@ function topicSaveParam(value){
     SaveParam.publish(Param);
 }
 function PublishTopicCmdVel(vec3) {
-    var twist = new ROSLIB.Message({
+    let str;
+    let x_,y_,z_;
+    //console.log(localStorage.COORD)
+    if(localStorage.COORD==1){
+        x_ = vec3.x;
+        y_ = vec3.y;
+        z_ = vec3.z;
+    }
+    else{
+        x_ = vec3.y;
+        y_ = -vec3.x;
+        z_ = vec3.z;
+    }
+    str="---"+"<br/>"+"linear:<br/>"+"&ensp;&ensp;x: "+ num2str(x_) +"<br/>"+"&ensp;&ensp;y: "+ num2str(y_)+"<br/>"+"&ensp;&ensp;z: 0.0<br/>";
+    str=str+"angular:<br/>"+"&ensp;&ensp;x: 0.0"+"<br/>"+"&ensp;&ensp;y: 0.0"+"<br/>"+"&ensp;&ensp;z: "+ num2str(z_) + "<br/>---";
+        var twist = new ROSLIB.Message({
         linear: {
-            x: vec3.x,
-            y: vec3.y,
+            x: x_,
+            y: y_,
             z: 0
         },
         angular: {
             x: 0,
             y: 0,
-            z: vec3.z
+            z: z_
         }
     });
-    let str;
-    //str="---"+"<br/>"+"linear:<br/>"+"&ensp;&ensp;x: "+String(Math.round(vec3.x*100)/100)+"<br/>"+"&ensp;&ensp;y: "+String(Math.round(vec3.y*100)/100)+"<br/>"+"&ensp;&ensp;z: 0.0<br/>";
-    //str=str+"angular:<br/>"+"&ensp;&ensp;x: 0.0"+"<br/>"+"&ensp;&ensp;y: 0.0"+"<br/>"+"&ensp;&ensp;z: "+String(Math.round(vec3.z*100)/100);
     if (RemoteState) {
-      console.log(twist);
+      //console.log(twist);
+      show_vel(str);
       //SendMsgs(str,0);
       cmdVel1.publish(twist);
     }
 }
+function num2str(value){
+    value = parseFloat(Math.round(value*100)/100);
+    let str;    
+    if((value*10)%10==0){
+        str = String(value)+".0";
+    }else{
+        str = String(value);
+    }
+    return str;
+}
+

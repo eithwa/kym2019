@@ -99,17 +99,17 @@ HoldConditionBox.get(function(value) {
         for (var i = 0; i < obj.length; i++) {
             obj[i].value = value[i];
         }
-    }
-    let chase = parseInt(obj[4].value);
-    console.log(obj[4].value);
-    if(chase){
-        document.getElementsByName("ChaseButton").checked =true;
-        $('#ChaseButton').prop('checked',true);
-        $('#ChaseButton').change();
-    }else{
-        document.getElementsByName("ChaseButton").checked =false;
-        $('#ChaseButton').prop('checked',false);
-        $('#ChaseButton').change();
+        let chase = parseInt(obj[4].value);
+        console.log(obj[4].value);
+        if(chase){
+            document.getElementsByName("ChaseButton").checked =true;
+            $('#ChaseButton').prop('checked',true);
+            $('#ChaseButton').change();
+        }else{
+            document.getElementsByName("ChaseButton").checked =false;
+            $('#ChaseButton').prop('checked',false);
+            $('#ChaseButton').change();
+        }
     }
 });
 param_afast.get(function(value) {
@@ -131,4 +131,5 @@ param_wcmps.get(function(value) {
         obj[2].value = value;   
     }
 });
+
 

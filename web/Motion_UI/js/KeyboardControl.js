@@ -3,7 +3,11 @@ window.addEventListener("keyup", keyuped, false);
 
 var keys = [];
 var start;
-var vec3;
+var vec3 = new ROSLIB.Message({
+    x: 0,
+    y: 0,
+    z: 0
+});
 
 function KeyboardState(state) {
     start = state;
@@ -14,143 +18,49 @@ function keysdown(e) {
         var speed = document.getElementById("SpeedInput").value;
         keys[e.keyCode] = true;
 
-        //Strategy_Choose
-        if (keys[32] && keys[49]) {
-            SetBehaviorKeyborard([0, 1, 1, 0, 0, 0, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[50]) {
-            SetBehaviorKeyborard([1, 0, 1, 0, 0, 0, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[51]) {
-            SetBehaviorKeyborard([0, 1, 0, 0, 1, 0, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[52]) {
-            SetBehaviorKeyborard([1, 0, 0, 0, 1, 0, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[53]) {
-            SetBehaviorKeyborard([0, 1, 0, 0, 0, 1, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[54]) {
-            SetBehaviorKeyborard([1, 0, 0, 0, 0, 1, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[55]) {
-            SetBehaviorKeyborard([0, 1, 0, 1, 0, 0, 0]);
-            e.preventDefault();
-        } else if (keys[32] && keys[56]) {
-            SetBehaviorKeyborard([1, 0, 0, 1, 0, 0, 0]);
-            e.preventDefault();
-        }
-        //RobotControl
-        if (keys[87] && keys[68]) {
-            vec3 = new ROSLIB.Message({
-                x: parseFloat(speed / Math.pow(2, 0.5)),
-                y: parseFloat(speed / Math.pow(2, 0.5)),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[87] && keys[65]) {
-            vec3 = new ROSLIB.Message({
-                x: -parseFloat(speed / Math.pow(2, 0.5)),
-                y: parseFloat(speed / Math.pow(2, 0.5)),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[83] && keys[68]) {
-            vec3 = new ROSLIB.Message({
-                x: parseFloat(speed / Math.pow(2, 0.5)),
-                y: -parseFloat(speed / Math.pow(2, 0.5)),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[83] && keys[65]) {
-            vec3 = new ROSLIB.Message({
-                x: -parseFloat(speed / Math.pow(2, 0.5)),
-                y: -parseFloat(speed / Math.pow(2, 0.5)),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[87]) {
-            vec3 = new ROSLIB.Message({
-                x: 0,
-                y: parseFloat(speed),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-           // PublishTopicCmdVel(vec3);
-        } else if (keys[68]) {
-            vec3 = new ROSLIB.Message({
-                x: parseFloat(speed),
-                y: 0,
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[83]) {
-            vec3 = new ROSLIB.Message({
-                x: 0,
-                y: -parseFloat(speed),
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[65]) {
-            vec3 = new ROSLIB.Message({
-                x: -parseFloat(speed),
-                y: 0,
-                z: 0
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[69]) {
-            var speed_;
-            if (Math.abs(parseFloat(speed)) > 15){
-              speed_ = parseFloat(speed) * 0.5;
-            }else{
-              speed_ = speed;
-            }
-            vec3 = new ROSLIB.Message({
-                x: 0,
-                y: 0,
-                z: -parseFloat(speed_)
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        } else if (keys[81]) {
-            var speed_;
-            if (Math.abs(parseFloat(speed)) > 15){
-              speed_ = parseFloat(speed) * 0.5;
-            }else{
-              speed_ = speed;
-            }
-            vec3 = new ROSLIB.Message({
-                x: 0,
-                y: 0,
-                z: parseFloat(speed_)
-            });
-            PublishTopicCmdVel(vec3);
-            //PublishTopicCmdVel(vec3);
-        }
-        //SwitchRobot
-        if (keys[80]) {
-            PublishTopicGameState(0);
-            StrategyStop();
-        } else if (keys[79]) {
-            PublishTopicGameState(1);
-        }
+        vec3 = new ROSLIB.Message({
+            x: 0,
+            y: 0,
+            z: 0
+        });
 
+        if (keys[87]) {//w
+            vec3.y=parseFloat(speed);
+        } 
+        if (keys[68]) {//d
+            vec3.x=parseFloat(speed);
+
+        } 
+        if (keys[83]) {//s
+            vec3.y=-parseFloat(speed);
+        } 
+        if (keys[65]) {//a
+           vec3.x=-parseFloat(speed);
+        } 
+        if (keys[69]) {//e
+            let speed_;
+            if (Math.abs(parseFloat(speed)) > 15){
+              speed_ = parseFloat(speed) * 0.5;
+            }else{
+              speed_ = speed;
+            }
+            vec3.z=-parseFloat(speed_);
+        } 
+        if (keys[81]) {//q
+            let speed_;
+            if (Math.abs(parseFloat(speed)) > 15){
+              speed_ = parseFloat(speed) * 0.5;
+            }else{
+              speed_ = speed;
+            }
+            vec3.z=parseFloat(speed_);
+        }
+        PublishTopicCmdVel(vec3);
     }
 }
 
 function releasebutton(state) {
-    let vec3 = new ROSLIB.Message({
-        x: 0,
-        y: 0,
-        z: 0
-    });
+
     switch(state){
       case 81:
         vec3.z = 0;
@@ -186,7 +96,6 @@ function releasebutton(state) {
 
 function keyuped(e) {
     if (start) {
-      console.log("start moving");
         if (keys[e.keyCode] == true) releasebutton(e.keyCode);
         //else if (keys[69] == true) releasebutton(69);
         //else if (keys[87] == true) releasebutton(87);

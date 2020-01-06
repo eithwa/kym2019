@@ -43,3 +43,4 @@ $("input:radio").attr("checked", false);
 
 document.getElementById("KeyboardControlButton").checked = true;
 document.getElementById("StandbyButton").checked = true;
+document.getElementById("coord1input").checked = true;
